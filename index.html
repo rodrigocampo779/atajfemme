@@ -662,7 +662,7 @@
 
           var sizesRow = card.querySelector('[data-role="sizes"]');
           if(variant.sizes.length === 1){
-            sizesRow.innerHTML = '<span class="pill is-active" style="cursor:default;">Talle '+variant.sizes[0]+'</span>';
+            sizesRow.innerHTML = '<span class="pill is-active" style="cursor:default;">'+variant.sizes[0]+'</span>';
           } else {
             sizesRow.innerHTML = variant.sizes.map(function(s){ return '<button type="button" class="pill" data-size="'+s+'">'+s+'</button>'; }).join("");
             bindSizePills();
