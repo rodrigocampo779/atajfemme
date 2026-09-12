@@ -124,14 +124,14 @@
     max-width:var(--maxw); margin-inline:auto;
   }
   .hero-mark{
-    position:absolute; top:.5rem; right:-1rem; width:min(42vw,460px); aspect-ratio:1/1;
+    position:absolute; top:50%; right:6%; width:min(38vw,420px); aspect-ratio:1/1;
     border:3px solid var(--rose); border-radius:18%; background:#0c0b0d; padding:1.8rem;
     overflow:hidden; filter:drop-shadow(0 24px 60px rgba(0,0,0,.55));
-    transform:rotate(8deg); animation:drift 14s ease-in-out infinite;
+    transform:translateY(-50%) rotate(8deg); animation:drift 14s ease-in-out infinite;
   }
   .hero-mark img{ width:100%; height:100%; object-fit:contain; display:block; mix-blend-mode:screen; }
   @media (max-width:760px){ .hero-mark{ display:none; } }
-  @keyframes drift{ 0%,100%{ transform:rotate(8deg) translateY(0);} 50%{ transform:rotate(4deg) translateY(-14px);} }
+  @keyframes drift{ 0%,100%{ transform:translateY(-50%) rotate(8deg);} 50%{ transform:translateY(calc(-50% - 14px)) rotate(4deg);} }
   .hero-inner{ position:relative; max-width:46rem; }
   .hero h1{
     font-family:var(--font-gothic); font-size:calc(var(--fs-hero) * .82); font-weight:400;
