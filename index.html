@@ -188,17 +188,19 @@
     display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
     gap:1rem; margin-bottom:2.5rem; padding-bottom:1.5rem; border-bottom:1px solid var(--line);
   }
-  .search-field{ position:relative; flex:1 1 16rem; max-width:22rem; }
-  .search-field .hw{
-    position:absolute; left:.95rem; top:50%; transform:translateY(-50%);
-    width:.95rem; height:.95rem; color:var(--bone-dim); pointer-events:none;
-  }
+  .search-field{ display:flex; align-items:center; justify-content:flex-end; gap:.5rem; }
   .search-field input{
-    width:100%; background:var(--ink-2); border:1px solid var(--line-strong); color:var(--bone);
-    border-radius:999px; padding:.7rem 1rem .7rem 2.6rem; font-size:.85rem; font-family:inherit;
+    width:0; min-width:0; opacity:0; padding:0; margin:0; border:none; background:transparent; color:var(--bone);
+    border-radius:999px; font-size:.85rem; font-family:inherit;
+    transition:width .3s var(--ease), opacity .2s ease, padding .3s var(--ease);
+  }
+  .search-field.is-open input{
+    width:14rem; max-width:40vw; opacity:1; padding:.65rem 1rem;
+    background:var(--ink-2); border:1px solid var(--line-strong);
   }
   .search-field input::placeholder{ color:var(--bone-dim); }
   .search-field input:focus{ outline:2px solid var(--rose); outline-offset:1px; border-color:var(--rose); }
+  .search-field .icon-btn[aria-expanded="true"]{ border-color:var(--rose); color:var(--rose); }
   .filter-cats{ display:flex; flex-wrap:wrap; gap:.5rem; }
   .shop-empty{ text-align:center; color:var(--bone-dim); font-size:.9rem; padding:3.5rem 1rem; }
 
@@ -453,15 +455,17 @@
     </div>
 
     <div class="shop-filters reveal">
-      <div class="search-field">
-        <svg class="hw" aria-hidden="true"><use href="#icon-search"/></svg>
-        <input type="search" id="searchInput" placeholder="Buscar por nombre...">
-      </div>
       <div class="filter-cats" id="filterCats" role="group" aria-label="Filtrar por categoría">
         <button type="button" class="pill is-active" data-cat="all">Todos</button>
         <button type="button" class="pill" data-cat="tops">Tops</button>
         <button type="button" class="pill" data-cat="musculosas">Musculosas</button>
         <button type="button" class="pill" data-cat="remeras">Remeras</button>
+      </div>
+      <div class="search-field" id="searchField">
+        <input type="search" id="searchInput" placeholder="Buscar por nombre..." aria-label="Buscar por nombre">
+        <button type="button" class="icon-btn" id="searchToggle" aria-label="Buscar prendas" aria-expanded="false" aria-controls="searchInput">
+          <svg class="hw"><use href="#icon-search"/></svg>
+        </button>
       </div>
     </div>
 
@@ -779,6 +783,8 @@
   });
 
   /* ---------- búsqueda y filtro por categoría ---------- */
+  var searchField = document.getElementById("searchField");
+  var searchToggle = document.getElementById("searchToggle");
   var searchInput = document.getElementById("searchInput");
   var filterCats = document.getElementById("filterCats");
   var shopEmpty = document.getElementById("shopEmpty");
@@ -797,7 +803,24 @@
     shopEmpty.hidden = visible > 0;
   }
 
+  function closeSearch(){
+    searchField.classList.remove("is-open");
+    searchToggle.setAttribute("aria-expanded", "false");
+    searchInput.value = "";
+    applyFilters();
+  }
+
+  searchToggle.addEventListener("click", function(){
+    var isOpen = searchField.classList.toggle("is-open");
+    searchToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    if(isOpen){ searchInput.focus(); } else { closeSearch(); }
+  });
   searchInput.addEventListener("input", applyFilters);
+  searchInput.addEventListener("keydown", function(e){ if(e.key === "Escape") closeSearch(); });
+  document.addEventListener("click", function(e){
+    if(searchField.classList.contains("is-open") && !searchField.contains(e.target)) closeSearch();
+  });
+
   filterCats.querySelectorAll("[data-cat]").forEach(function(btn){
     btn.addEventListener("click", function(){
       filterCats.querySelectorAll("[data-cat]").forEach(function(b){ b.classList.remove("is-active"); });
