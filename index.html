@@ -142,6 +142,12 @@
   .hero h1 em{ font-style:normal; color:var(--rose); }
   .hero-sub{ margin-top:1.5rem; max-width:34rem; color:var(--bone-dim); font-size:1.05rem; }
   .hero-cta{ display:flex; flex-wrap:wrap; align-items:center; gap:1.6rem; margin-top:2.2rem; }
+  @media (max-width:760px){
+    .hero-inner{ margin-inline:auto; text-align:center; }
+    .hero-sub{ margin-inline:auto; }
+    .hero-cta{ justify-content:center; }
+    .sec-head{ justify-content:center; text-align:center; }
+  }
   .ig-inline{ font-family:var(--font-gothic); display:inline-flex; align-items:center; gap:.5rem; font-size:1.05rem; font-weight:400; color:var(--bone); text-decoration:none; border-bottom:1px solid var(--line-strong); padding-bottom:.15rem; transition:border-color .25s var(--ease), color .25s var(--ease); }
   .ig-inline:hover{ color:var(--rose); border-color:var(--rose); }
 
