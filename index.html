@@ -457,6 +457,10 @@
   <symbol id="icon-expand" viewBox="0 0 24 24">
     <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </symbol>
+  <symbol id="icon-bag" viewBox="0 0 24 24">
+    <path d="M9 8V6.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M5.5 8h13l-1 12.5a1 1 0 0 1-1 .9H7.5a1 1 0 0 1-1-.9L5.5 8Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+  </symbol>
 </svg>
 
 <nav class="nav">
@@ -470,7 +474,7 @@
   </ul>
   <div class="nav-right">
     <button class="icon-btn" id="cartOpenBtn" aria-haspopup="dialog" aria-controls="cartDrawer" aria-label="Abrir carrito">
-      <svg class="hw"><use href="#heart-wire"/></svg>
+      <svg class="hw"><use href="#icon-bag"/></svg>
       <span class="cart-count" id="cartCount" data-empty="true">0</span>
     </button>
   </div>
@@ -594,7 +598,7 @@
 </footer>
 
 <button class="cart-fab" id="cartFab" aria-haspopup="dialog" aria-controls="cartDrawer" aria-label="Abrir carrito">
-  <svg class="hw"><use href="#heart-wire"/></svg>
+  <svg class="hw"><use href="#icon-bag"/></svg>
   <span class="cart-count" id="cartCountFab" data-empty="true">0</span>
 </button>
 
