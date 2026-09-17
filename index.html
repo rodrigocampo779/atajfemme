@@ -834,7 +834,7 @@
         p.sizes.forEach(function(s){ sizesHTML += '<button type="button" class="pill" data-size="'+s+'">'+s+'</button>'; });
         sizesHTML += '</div><p class="hint" data-hint="sizes">Elegí un talle</p>';
       } else {
-        sizesHTML += '<p class="size-static">Talle '+p.sizes[0]+'</p>';
+        sizesHTML += '<div class="pillrow-label">Talle</div><div class="pillrow"><span class="pill is-active" style="cursor:default;">'+p.sizes[0]+'</span></div>';
       }
       if(p.colors){
         colorsHTML += '<div class="pillrow-label">Color</div><div class="pillrow" data-role="colors">';
