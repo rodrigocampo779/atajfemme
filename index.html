@@ -285,6 +285,16 @@
   }
   .piece__zoom .hw{ width:1rem; height:1rem; }
   .piece:hover .piece__zoom{ opacity:1; border-color:var(--rose); color:var(--rose); }
+  .piece__share{
+    position:absolute; top:.9rem; left:.9rem; width:2.1rem; height:2.1rem; border-radius:999px;
+    background:rgba(12,11,13,.55); backdrop-filter:blur(4px); border:1px solid var(--line-strong);
+    color:var(--bone); display:flex; align-items:center; justify-content:center;
+    opacity:.8; transition:opacity .25s ease, border-color .25s ease, color .25s ease;
+    cursor:pointer; z-index:2; padding:0;
+  }
+  .piece__share .hw{ width:1rem; height:1rem; }
+  .piece:hover .piece__share{ opacity:1; }
+  .piece__share:hover{ border-color:var(--rose); color:var(--rose); }
 
   .lightbox{
     position:fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center;
@@ -293,6 +303,23 @@
   }
   .lightbox.is-open{ opacity:1; pointer-events:auto; }
   .lightbox img{ max-width:100%; max-height:100%; object-fit:contain; box-shadow:0 30px 80px -20px rgba(0,0,0,.7); }
+  .lightbox__nav{
+    position:absolute; top:50%; transform:translateY(-50%); width:3rem; height:3rem; border-radius:999px;
+    background:var(--ink-2); border:1px solid var(--line-strong); color:var(--bone);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:2;
+    transition:border-color .25s ease, color .25s ease;
+  }
+  .lightbox__nav:hover{ border-color:var(--rose); color:var(--rose); }
+  .lightbox__nav .hw{ width:1.4rem; height:1.4rem; }
+  .lightbox__nav--prev{ left:1rem; }
+  .lightbox__nav--prev .hw{ transform:rotate(180deg); }
+  .lightbox__nav--next{ right:1rem; }
+  .lightbox__nav[hidden]{ display:none; }
+  @media (max-width:620px){
+    .lightbox__nav{ width:2.4rem; height:2.4rem; }
+    .lightbox__nav--prev{ left:.4rem; }
+    .lightbox__nav--next{ right:.4rem; }
+  }
   .lightbox__close{
     position:absolute; top:1.2rem; right:1.2rem; width:2.8rem; height:2.8rem; border-radius:999px;
     background:var(--ink-2); border:1px solid var(--line-strong); color:var(--bone);
@@ -468,6 +495,14 @@
     <path d="M3 6h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
     <path d="M16 10a4 4 0 0 1-8 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
   </symbol>
+  <symbol id="icon-link" viewBox="0 0 24 24">
+    <path d="M9 15l6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M11 7l1.3-1.3a3.5 3.5 0 0 1 5 5L16 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M13 17l-1.3 1.3a3.5 3.5 0 0 1-5-5L8 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="icon-chevron" viewBox="0 0 24 24">
+    <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
 </svg>
 
 <nav class="nav">
@@ -640,7 +675,9 @@
 
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Foto ampliada">
   <button type="button" class="lightbox__close" id="lightboxClose" aria-label="Cerrar">×</button>
+  <button type="button" class="lightbox__nav lightbox__nav--prev" id="lightboxPrev" aria-label="Color anterior" hidden><svg class="hw"><use href="#icon-chevron"/></svg></button>
   <img id="lightboxImg" src="" alt="">
+  <button type="button" class="lightbox__nav lightbox__nav--next" id="lightboxNext" aria-label="Color siguiente" hidden><svg class="hw"><use href="#icon-chevron"/></svg></button>
 </div>
 
 <script>
@@ -844,15 +881,61 @@
   /* ---------- lightbox (ampliar foto) ---------- */
   var lightbox = document.getElementById("lightbox");
   var lightboxImg = document.getElementById("lightboxImg");
-  function openLightbox(src, alt){
-    lightboxImg.src = src;
-    lightboxImg.alt = alt || "";
+  var lightboxPrev = document.getElementById("lightboxPrev");
+  var lightboxNext = document.getElementById("lightboxNext");
+  var lightboxState = null; // { card, variants, index } when the product has multiple colors
+
+  function openLightboxForCard(card, p){
+    var photo = card.querySelector(".piece__photo");
+    if(p.variants && p.variants.length > 1){
+      var idx = -1;
+      for(var i=0;i<p.variants.length;i++){ if(p.variants[i].alt === photo.alt){ idx = i; break; } }
+      lightboxState = { card:card, variants:p.variants, index:idx };
+      lightboxPrev.hidden = false;
+      lightboxNext.hidden = false;
+    } else {
+      lightboxState = null;
+      lightboxPrev.hidden = true;
+      lightboxNext.hidden = true;
+    }
+    lightboxImg.src = photo.src;
+    lightboxImg.alt = photo.alt;
     lightbox.classList.add("is-open");
   }
-  function closeLightbox(){ lightbox.classList.remove("is-open"); }
+  function lightboxStep(dir){
+    if(!lightboxState) return;
+    var n = lightboxState.variants.length;
+    if(lightboxState.index === -1){
+      lightboxState.index = dir > 0 ? 0 : n - 1;
+    } else {
+      lightboxState.index = (lightboxState.index + dir + n) % n;
+    }
+    var variant = lightboxState.variants[lightboxState.index];
+    lightboxImg.src = variant.img;
+    lightboxImg.alt = variant.alt;
+    if(lightboxState.card._applyVariant) lightboxState.card._applyVariant(variant);
+  }
+  function closeLightbox(){ lightbox.classList.remove("is-open"); lightboxState = null; }
   document.getElementById("lightboxClose").addEventListener("click", closeLightbox);
+  lightboxPrev.addEventListener("click", function(){ lightboxStep(-1); });
+  lightboxNext.addEventListener("click", function(){ lightboxStep(1); });
   lightbox.addEventListener("click", function(e){ if(e.target === lightbox) closeLightbox(); });
-  document.addEventListener("keydown", function(e){ if(e.key === "Escape") closeLightbox(); });
+  document.addEventListener("keydown", function(e){
+    if(!lightbox.classList.contains("is-open")) return;
+    if(e.key === "Escape") closeLightbox();
+    if(e.key === "ArrowLeft") lightboxStep(-1);
+    if(e.key === "ArrowRight") lightboxStep(1);
+  });
+
+  function copyProductLink(id){
+    var url = location.origin + location.pathname + "#p-" + id;
+    function done(){ showToast("Enlace copiado — pegalo donde quieras"); }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(done).catch(function(){ window.prompt("Copiá el enlace:", url); });
+    } else {
+      window.prompt("Copiá el enlace:", url);
+    }
+  }
 
   PRODUCTS.forEach(function(p){
     var hasVariants = !!p.variants;
@@ -863,6 +946,7 @@
 
     var card = document.createElement("article");
     card.className = "piece piece--" + p.size + " reveal";
+    card.id = "p-" + p.id;
 
     var sizesHTML = "";
     var colorsHTML = "";
@@ -892,6 +976,7 @@
         '<img class="piece__photo" src="'+p.img+'" alt="'+p.alt+'" loading="lazy">'+
         (p.tag ? '<span class="piece__tag">'+p.tag+'</span>' : '')+
         '<svg class="piece__mark hw"><use href="#heart-wire"/></svg>'+
+        '<button type="button" class="piece__share" aria-label="Copiar enlace del producto"><svg class="hw"><use href="#icon-link"/></svg></button>'+
         '<span class="piece__zoom" aria-hidden="true"><svg class="hw"><use href="#icon-expand"/></svg></span>'+
       '</div>'+
       '<div class="piece__body">'+
@@ -905,8 +990,12 @@
     cardEntries.push({ card:card, cat:p.cat, text:(p.name+" "+p.desc).toLowerCase() });
 
     card.querySelector(".piece__frame").addEventListener("click", function(){
-      var photo = card.querySelector(".piece__photo");
-      openLightbox(photo.src, photo.alt);
+      openLightboxForCard(card, p);
+    });
+
+    card.querySelector(".piece__share").addEventListener("click", function(e){
+      e.stopPropagation();
+      copyProductLink(p.id);
     });
 
     function bindSizePills(){
@@ -923,32 +1012,36 @@
     }
 
     if(hasVariants){
+      function applyVariant(variant){
+        card.querySelectorAll('[data-color]').forEach(function(b){ b.classList.toggle("is-active", b.dataset.color === variant.color); });
+
+        selections[p.id].color = variant.color;
+        selections[p.id].size = variant.sizes.length === 1 ? variant.sizes[0] : null;
+
+        var sizesRow = card.querySelector('[data-role="sizes"]');
+        if(variant.sizes.length === 1){
+          sizesRow.innerHTML = '<span class="pill is-active" style="cursor:default;">'+variant.sizes[0]+'</span>';
+        } else {
+          sizesRow.innerHTML = variant.sizes.map(function(s){ return '<button type="button" class="pill" data-size="'+s+'">'+s+'</button>'; }).join("");
+          bindSizePills();
+        }
+        sizesRow.classList.remove("needs-attention");
+        card.querySelector('[data-hint="sizes"]').classList.remove("is-visible");
+
+        var photo = card.querySelector(".piece__photo");
+        photo.src = variant.img;
+        photo.alt = variant.alt;
+
+        var cr = card.querySelector('[data-role="colors"]');
+        cr.classList.remove("needs-attention");
+        card.querySelector('[data-hint="colors"]').classList.remove("is-visible");
+      }
+      card._applyVariant = applyVariant;
+
       card.querySelectorAll('[data-color]').forEach(function(btn){
         btn.addEventListener("click", function(){
-          card.querySelectorAll('[data-color]').forEach(function(b){ b.classList.remove("is-active"); });
-          btn.classList.add("is-active");
-
           var variant = p.variants.filter(function(v){ return v.color === btn.dataset.color; })[0];
-          selections[p.id].color = variant.color;
-          selections[p.id].size = variant.sizes.length === 1 ? variant.sizes[0] : null;
-
-          var sizesRow = card.querySelector('[data-role="sizes"]');
-          if(variant.sizes.length === 1){
-            sizesRow.innerHTML = '<span class="pill is-active" style="cursor:default;">'+variant.sizes[0]+'</span>';
-          } else {
-            sizesRow.innerHTML = variant.sizes.map(function(s){ return '<button type="button" class="pill" data-size="'+s+'">'+s+'</button>'; }).join("");
-            bindSizePills();
-          }
-          sizesRow.classList.remove("needs-attention");
-          card.querySelector('[data-hint="sizes"]').classList.remove("is-visible");
-
-          var photo = card.querySelector(".piece__photo");
-          photo.src = variant.img;
-          photo.alt = variant.alt;
-
-          var cr = card.querySelector('[data-role="colors"]');
-          cr.classList.remove("needs-attention");
-          card.querySelector('[data-hint="colors"]').classList.remove("is-visible");
+          applyVariant(variant);
         });
       });
     } else {
@@ -1000,6 +1093,19 @@
       }
     });
   });
+
+  /* ---------- link directo a un producto (ej. desde Instagram) ---------- */
+  if(location.hash.indexOf("#p-") === 0){
+    var deepLinkId = location.hash.slice(3);
+    var deepLinkProduct = PRODUCTS.filter(function(p){ return p.id === deepLinkId; })[0];
+    var deepLinkCard = document.getElementById("p-" + deepLinkId);
+    if(deepLinkProduct && deepLinkCard){
+      setTimeout(function(){
+        deepLinkCard.scrollIntoView({ behavior:"smooth", block:"center" });
+        openLightboxForCard(deepLinkCard, deepLinkProduct);
+      }, 300);
+    }
+  }
 
   /* ---------- búsqueda y filtro por categoría ---------- */
   var searchField = document.getElementById("searchField");
