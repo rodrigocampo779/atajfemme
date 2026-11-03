@@ -445,6 +445,21 @@
   .cart-fab:hover{ transform:translateY(-3px) scale(1.04); border-color:var(--rose); }
   .cart-fab .hw{ width:1.5rem; height:1.5rem; }
 
+  .wpp-fab{
+    position:fixed; right:1.4rem; bottom:5.4rem; z-index:70;
+    width:3.4rem; height:3.4rem; border-radius:999px; border:1px solid var(--line-strong);
+    background:#25D366; color:#0c0b0d; text-decoration:none;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 14px 30px -12px rgba(0,0,0,.6);
+    transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+  }
+  .wpp-fab:hover{ transform:translateY(-3px) scale(1.04); box-shadow:0 16px 34px -10px rgba(37,211,102,.55); }
+  .wpp-fab .hw{ width:1.6rem; height:1.6rem; }
+  @media (max-width:620px){
+    .cart-fab{ right:1rem; bottom:1rem; }
+    .wpp-fab{ right:1rem; bottom:4.6rem; }
+  }
+
   .scrim{
     position:fixed; inset:0; background:rgba(6,5,7,.6); backdrop-filter:blur(2px);
     opacity:0; pointer-events:none; transition:opacity .35s ease; z-index:80;
@@ -537,6 +552,9 @@
   </symbol>
   <symbol id="icon-chevron" viewBox="0 0 24 24">
     <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="icon-whatsapp" viewBox="0 0 24 24">
+    <path fill="currentColor" d="M12.01 2C6.49 2 2 6.47 2 11.98c0 1.98.58 3.83 1.58 5.4L2 22l4.78-1.53a10 10 0 0 0 5.23 1.47h.01c5.52 0 10-4.47 10-9.97C22 6.47 17.53 2 12.01 2Zm5.84 14.16c-.25.69-1.24 1.27-1.98 1.43-.53.11-1.22.2-3.55-.76-2.98-1.23-4.9-4.24-5.05-4.44-.15-.2-1.21-1.6-1.21-3.06 0-1.45.75-2.17 1.03-2.46.25-.27.63-.39.98-.39.12 0 .22 0 .32.01.29.01.43.02.63.5.24.58.82 2.01.9 2.15.07.15.12.32.02.52-.1.2-.15.32-.29.49-.15.17-.3.38-.44.51-.15.14-.3.3-.13.58.17.29.77 1.27 1.65 2.06 1.13 1.01 2.09 1.33 2.38 1.48.29.15.46.13.63-.07.17-.2.72-.84.92-1.13.19-.29.39-.24.64-.14.25.1 1.62.76 1.9.9.28.14.46.21.53.33.07.12.07.68-.18 1.37Z"/>
   </symbol>
 </svg>
 
@@ -679,6 +697,10 @@
     </div>
   </div>
 </footer>
+
+<a class="wpp-fab" href="https://wa.me/5491125645400" target="_blank" rel="noopener" aria-label="Escribinos por WhatsApp">
+  <svg class="hw"><use href="#icon-whatsapp"/></svg>
+</a>
 
 <button class="cart-fab" id="cartFab" aria-haspopup="dialog" aria-controls="cartDrawer" aria-label="Abrir carrito">
   <svg class="hw"><use href="#icon-bag"/></svg>
