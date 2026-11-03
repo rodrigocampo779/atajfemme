@@ -338,10 +338,10 @@
     appearance:none; background:none; border:none; cursor:pointer; padding:0;
     display:inline-flex; align-items:center; gap:.35rem;
     font-family:var(--font-body); font-weight:700; font-size:.76rem; letter-spacing:.02em;
-    color:var(--bone-dim); transition:color .2s ease;
+    color:var(--rose); transition:color .2s ease;
   }
   .measures__toggle .hw{ width:.65rem; height:.65rem; transition:transform .2s ease; }
-  .measures__toggle:hover{ color:var(--rose); }
+  .measures__toggle:hover{ color:var(--bone); }
   .measures__toggle.is-open .hw{ transform:rotate(90deg); }
   .measures__panel{ margin-top:.55rem; overflow-x:auto; }
   .measures__table{ border-collapse:collapse; width:100%; font-size:.74rem; }
@@ -448,12 +448,12 @@
   .wpp-fab{
     position:fixed; right:1.4rem; bottom:5.4rem; z-index:70;
     width:3.4rem; height:3.4rem; border-radius:999px; border:1px solid var(--line-strong);
-    background:#25D366; color:#0c0b0d; text-decoration:none;
+    background:linear-gradient(135deg,var(--rose),var(--rose-deep)); color:#fff; text-decoration:none;
     display:flex; align-items:center; justify-content:center;
     box-shadow:0 14px 30px -12px rgba(0,0,0,.6);
     transition:transform .3s var(--ease), box-shadow .3s var(--ease);
   }
-  .wpp-fab:hover{ transform:translateY(-3px) scale(1.04); box-shadow:0 16px 34px -10px rgba(37,211,102,.55); }
+  .wpp-fab:hover{ transform:translateY(-3px) scale(1.04); box-shadow:0 16px 34px -10px rgba(188,129,135,.55); }
   .wpp-fab .hw{ width:1.6rem; height:1.6rem; }
   @media (max-width:620px){
     .cart-fab{ right:1rem; bottom:1rem; }
