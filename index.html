@@ -363,6 +363,21 @@
   }
   .pill:hover{ border-color:var(--rose); color:var(--bone); }
   .pill.is-active{ background:var(--rose); border-color:var(--rose); color:#1a0510; }
+
+  .pillrow[data-role="sizes"] .pill[data-size]{ position:relative; }
+  .pillrow[data-role="sizes"] .pill[data-size]:hover{ transform:translateY(-2px); }
+  .pillrow[data-role="sizes"] .pill[data-size].is-active::after{
+    content:"♥";
+    position:absolute; top:-.5rem; right:-.42rem;
+    width:1.05rem; height:1.05rem; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--ink-2); border:1px solid var(--rose);
+    color:var(--rose); font-size:.56rem; line-height:1;
+    box-shadow:0 3px 8px -2px rgba(0,0,0,.5);
+    animation:heartPop .35s var(--ease);
+  }
+  @keyframes heartPop{ from{ transform:scale(0) rotate(-25deg); opacity:0; } to{ transform:scale(1) rotate(0); opacity:1; } }
+
   .pillrow.needs-attention{ animation:nudge .4s var(--ease); }
   .pillrow.needs-attention .pill{ border-color:var(--rose-deep); }
   @keyframes nudge{ 0%,100%{ transform:translateX(0);} 25%{ transform:translateX(-4px);} 75%{ transform:translateX(4px);} }
