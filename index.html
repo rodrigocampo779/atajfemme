@@ -419,6 +419,17 @@
   .ig-head h2{ margin-top:.6rem; }
   .ig-cta{ display:flex; justify-content:center; margin-top:2.6rem; }
 
+  /* ---------- review cta ---------- */
+  .review-cta{
+    text-align:center; max-width:36rem; margin-inline:auto; padding:3rem 2rem;
+    border:1px solid var(--line-strong); border-radius:20px;
+    background:linear-gradient(160deg, var(--ink-2), var(--ink-3));
+  }
+  .review-cta__mark{ width:2rem; height:2rem; color:var(--rose); margin-bottom:1rem; }
+  .review-cta h2{ font-family:var(--font-gothic); font-weight:400; font-size:1.9rem; }
+  .review-cta p{ color:var(--bone-dim); margin-top:.8rem; font-size:.95rem; }
+  .review-cta .btn{ margin-top:1.6rem; }
+
   /* ---------- footer ---------- */
   footer{ border-top:1px solid var(--line); padding-block:3.5rem 2rem; margin-top:2rem; }
   .foot-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:2.5rem; }
@@ -661,6 +672,17 @@
 
     <div class="ig-cta">
       <a class="btn btn--ghost" href="https://instagram.com/atajfemme" target="_blank" rel="noopener">Ir al Instagram →</a>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"><svg class="hw"><use href="#heart-wire"/></svg></div>
+
+  <section class="wrap">
+    <div class="review-cta reveal">
+      <svg class="hw review-cta__mark"><use href="#heart-wire"/></svg>
+      <h2>¿Ya compraste en ATAJ Femme?</h2>
+      <p>Tu experiencia puede ayudar a otras personas a elegir con más confianza 💛</p>
+      <a class="btn btn--primary" href="https://wa.me/5491125645400?text=Hola%21%20Quiero%20dejarles%20mi%20rese%C3%B1a%20sobre%20mi%20compra%20en%20ATAJ%20Femme%20%F0%9F%92%9B" target="_blank" rel="noopener">Dejar mi reseña ⭐</a>
     </div>
   </section>
 </main>
