@@ -1161,7 +1161,7 @@
   });
 
   function copyProductLink(id){
-    var url = location.origin + location.pathname + "#p-" + id;
+    var url = location.origin + "/p/" + id + ".html";
     function done(){ showToast("Enlace copiado — pegalo donde quieras"); }
     if(navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(url).then(done).catch(function(){ window.prompt("Copiá el enlace:", url); });
