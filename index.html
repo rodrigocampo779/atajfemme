@@ -36,6 +36,7 @@
 
     --maxw: 1280px;
     --pad: clamp(1.25rem, 5vw, 4rem);
+    --announce-h: 2.3rem;
     --ease: cubic-bezier(.16,.84,.44,1);
   }
 
@@ -80,8 +81,25 @@
   .hw{ width:1em; height:1em; overflow:visible; }
 
   /* ---------- nav ---------- */
+  .announce-bar{
+    position:fixed; top:0; left:0; right:0; z-index:70;
+    height:var(--announce-h); overflow:hidden;
+    background:linear-gradient(135deg,var(--rose),var(--rose-deep));
+  }
+  .announce-track{
+    display:flex; align-items:center; height:100%; width:max-content; gap:2.5rem;
+    padding-inline:1.25rem; animation:scroll 20s linear infinite;
+  }
+  .announce-track span{
+    display:inline-flex; align-items:center; gap:.5rem; white-space:nowrap;
+    font-family:var(--font-display); font-weight:800; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+    color:#fff;
+  }
+  .announce-track .hw{ width:.68rem; height:.68rem; color:#fff; }
+  @media (prefers-reduced-motion: reduce){ .announce-track{ animation:none; } }
+
   .nav{
-    position:fixed; inset:0 0 auto 0; z-index:60;
+    position:fixed; top:var(--announce-h); right:0; bottom:auto; left:0; z-index:60;
     display:flex; align-items:center; justify-content:space-between;
     padding:1.1rem var(--pad);
     background:rgba(12,11,13,.72);
@@ -122,7 +140,7 @@
 
   /* ---------- hero ---------- */
   .hero{
-    position:relative; padding:9.5rem var(--pad) 3.5rem; overflow:hidden;
+    position:relative; padding:calc(9.5rem + var(--announce-h)) var(--pad) 3.5rem; overflow:hidden;
     max-width:var(--maxw); margin-inline:auto;
   }
   .hero-mark{
@@ -143,7 +161,7 @@
   .hero-sub{ margin-top:1.5rem; max-width:34rem; color:var(--bone-dim); font-size:1.05rem; }
   .hero-cta{ display:flex; flex-wrap:wrap; align-items:center; gap:1.6rem; margin-top:2.2rem; }
   @media (max-width:760px){
-    .hero{ padding-top:6rem; padding-bottom:2.5rem; min-height:58vh; min-height:58svh; display:flex; align-items:center; }
+    .hero{ padding-top:calc(6rem + var(--announce-h)); padding-bottom:2.5rem; min-height:58vh; min-height:58svh; display:flex; align-items:center; }
     .hero-inner{ margin-inline:auto; text-align:center; }
     .hero-sub{ margin-inline:auto; }
     .hero-cta{ justify-content:center; }
@@ -511,7 +529,7 @@
   .drawer__fields select{ appearance:none; cursor:pointer; }
   .drawer__fields input::placeholder{ color:var(--bone-dim); }
   .drawer__fields input:focus, .drawer__fields select:focus{ outline:2px solid var(--rose); outline-offset:1px; }
-  .drawer__ship-hint{ font-size:.72rem; color:var(--bone-dim); margin-top:-.3rem; }
+  .drawer__ship-hint{ font-size:.85rem; font-weight:600; color:var(--rose); margin-top:-.3rem; }
 
   .drawer__foot{ border-top:1px solid var(--line); padding:1.1rem 1.4rem 1.4rem; }
   .totals{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:1rem; }
@@ -572,6 +590,19 @@
     <path fill="currentColor" d="M12.01 2C6.49 2 2 6.47 2 11.98c0 1.98.58 3.83 1.58 5.4L2 22l4.78-1.53a10 10 0 0 0 5.23 1.47h.01c5.52 0 10-4.47 10-9.97C22 6.47 17.53 2 12.01 2Zm5.84 14.16c-.25.69-1.24 1.27-1.98 1.43-.53.11-1.22.2-3.55-.76-2.98-1.23-4.9-4.24-5.05-4.44-.15-.2-1.21-1.6-1.21-3.06 0-1.45.75-2.17 1.03-2.46.25-.27.63-.39.98-.39.12 0 .22 0 .32.01.29.01.43.02.63.5.24.58.82 2.01.9 2.15.07.15.12.32.02.52-.1.2-.15.32-.29.49-.15.17-.3.38-.44.51-.15.14-.3.3-.13.58.17.29.77 1.27 1.65 2.06 1.13 1.01 2.09 1.33 2.38 1.48.29.15.46.13.63-.07.17-.2.72-.84.92-1.13.19-.29.39-.24.64-.14.25.1 1.62.76 1.9.9.28.14.46.21.53.33.07.12.07.68-.18 1.37Z"/>
   </symbol>
 </svg>
+
+<div class="announce-bar" aria-hidden="true">
+  <div class="announce-track">
+    <span><svg class="hw"><use href="#heart-wire"/></svg>Envío gratis a partir de $50.000</span>
+    <span><svg class="hw"><use href="#heart-wire"/></svg>Envío sin cargo en CABA a partir de 3 prendas</span>
+    <span><svg class="hw"><use href="#heart-wire"/></svg>Envío gratis a partir de $50.000</span>
+    <span><svg class="hw"><use href="#heart-wire"/></svg>Envío sin cargo en CABA a partir de 3 prendas</span>
+    <span><svg class="hw"><use href="#heart-wire"/></svg>Envío gratis a partir de $50.000</span>
+    <span><svg class="hw"><use href="#heart-wire"/></svg>Envío sin cargo en CABA a partir de 3 prendas</span>
+    <span><svg class="hw"><use href="#heart-wire"/></svg>Envío gratis a partir de $50.000</span>
+    <span><svg class="hw"><use href="#heart-wire"/></svg>Envío sin cargo en CABA a partir de 3 prendas</span>
+  </div>
+</div>
 
 <nav class="nav">
   <a class="brand" href="#top">
