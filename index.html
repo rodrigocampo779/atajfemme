@@ -504,17 +504,21 @@
   .cart-item__remove:hover{ color:var(--rose); }
 
   .drawer__fields{ display:flex; flex-direction:column; gap:.7rem; padding:0 1.4rem 1rem; }
-  .drawer__fields input{
+  .drawer__fields input, .drawer__fields select{
     background:var(--ink-3); border:1px solid var(--line-strong); color:var(--bone);
     border-radius:8px; padding:.7rem .85rem; font-size:.85rem; font-family:inherit;
   }
+  .drawer__fields select{ appearance:none; cursor:pointer; }
   .drawer__fields input::placeholder{ color:var(--bone-dim); }
-  .drawer__fields input:focus{ outline:2px solid var(--rose); outline-offset:1px; }
+  .drawer__fields input:focus, .drawer__fields select:focus{ outline:2px solid var(--rose); outline-offset:1px; }
+  .drawer__ship-hint{ font-size:.72rem; color:var(--bone-dim); margin-top:-.3rem; }
 
   .drawer__foot{ border-top:1px solid var(--line); padding:1.1rem 1.4rem 1.4rem; }
   .totals{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:1rem; }
   .totals span:first-child{ font-size:.85rem; color:var(--bone-dim); text-transform:uppercase; letter-spacing:.06em; }
   .totals span:last-child{ font-family:var(--font-display); font-size:1.3rem; color:var(--rose); font-variant-numeric:tabular-nums; }
+  .totals--sub{ margin-bottom:.5rem; }
+  .totals--sub span:last-child{ font-family:inherit; font-size:.85rem; color:var(--bone); font-weight:700; }
 
   /* ---------- toast ---------- */
   .toast{
@@ -738,9 +742,21 @@
   <div class="drawer__body" id="drawerBody"></div>
   <div class="drawer__fields" id="drawerFields" hidden>
     <input type="text" id="fieldName" placeholder="Tu nombre">
+    <select id="fieldZone">
+      <option value="" selected>¿Cómo recibís tu pedido?</option>
+      <option value="pickup">Retiro sin cargo — Ramos Mejía</option>
+      <option value="caba">Envío a CABA — $4.500</option>
+      <option value="zona1">Zona 1 (Avellaneda, Lanús, Lomas de Zamora, Vicente López, San Isidro, Matanza Norte, San Martín, Tres de Febrero, Morón, Hurlingham, Ituzaingó) — $5.600</option>
+      <option value="zona2">Zona 2 (San Fernando, Tigre, Matanza Sur, Moreno, San Miguel, José C. Paz, Malvinas Argentinas, Merlo, Berazategui, Quilmes, Florencio Varela, Almirante Brown) — $6.400</option>
+      <option value="zona3">Zona 3 (Nordelta, Pilar, Villa Rosa, Del Viso, Garín, Ing. Maschwitz, Derqui, Luján, General Rodríguez, Cañuelas, Marcos Paz, Máximo Paz, San Vicente, Guernica, La Plata, Berisso, Ensenada, Zárate, Campana) — $8.200</option>
+      <option value="otra">Otra localidad / interior del país — a cotizar por Andreani</option>
+    </select>
+    <p class="drawer__ship-hint">Envío sin cargo en CABA a partir de 3 prendas, y a todo destino en compras desde $50.000.</p>
     <input type="text" id="fieldLocation" placeholder="Localidad / dirección de envío">
   </div>
   <div class="drawer__foot">
+    <div class="totals totals--sub"><span>Subtotal</span><span id="cartSubtotal">$0</span></div>
+    <div class="totals totals--sub"><span>Envío</span><span id="cartShipping">Elegí cómo recibís tu pedido</span></div>
     <div class="totals"><span>Total</span><span id="cartTotal">$0</span></div>
     <button class="btn btn--primary btn--block" id="checkoutBtn" disabled>
       <svg class="hw"><use href="#heart-wire"/></svg>
@@ -1497,27 +1513,76 @@
 
   var drawerBody = document.getElementById("drawerBody");
   var drawerFields = document.getElementById("drawerFields");
+  var cartSubtotalEl = document.getElementById("cartSubtotal");
+  var cartShippingEl = document.getElementById("cartShipping");
   var cartTotalEl = document.getElementById("cartTotal");
   var checkoutBtn = document.getElementById("checkoutBtn");
+  var fieldZone = document.getElementById("fieldZone");
   var cartCountEls = [document.getElementById("cartCount"), document.getElementById("cartCountFab")];
 
+  var SHIPPING_ZONES = {
+    pickup: { label:"Retiro sin cargo — Ramos Mejía", price:0 },
+    caba:   { label:"CABA", price:4500 },
+    zona1:  { label:"Zona 1", price:5600 },
+    zona2:  { label:"Zona 2", price:6400 },
+    zona3:  { label:"Zona 3", price:8200 },
+    otra:   { label:"Otra localidad / interior del país", price:null }
+  };
+  var FREE_SHIPPING_FROM = 50000;
+
+  function cartSubtotal(){
+    return cart.reduce(function(s,i){ return s + i.price * i.qty; }, 0);
+  }
+  function cartCount(){
+    return cart.reduce(function(s,i){ return s + i.qty; }, 0);
+  }
+
+  // returns { price:number|null, label:string, free:boolean }
+  function computeShipping(zoneKey, subtotal, count){
+    if(!zoneKey) return null;
+    var zone = SHIPPING_ZONES[zoneKey];
+    if(zoneKey === "pickup") return { price:0, label:zone.label, free:false };
+    if(zoneKey === "otra") return { price:null, label:zone.label, free:false };
+    if(subtotal >= FREE_SHIPPING_FROM) return { price:0, label:zone.label, free:true };
+    if(zoneKey === "caba" && count >= 3) return { price:0, label:zone.label, free:true };
+    return { price:zone.price, label:zone.label, free:false };
+  }
+
+  function updateTotals(){
+    var subtotal = cartSubtotal();
+    cartSubtotalEl.textContent = fmt(subtotal);
+    var shipping = computeShipping(fieldZone.value, subtotal, cartCount());
+    if(!shipping){
+      cartShippingEl.textContent = "Elegí cómo recibís tu pedido";
+    } else if(shipping.price === null){
+      cartShippingEl.textContent = "A cotizar por Andreani";
+    } else if(shipping.price === 0){
+      cartShippingEl.textContent = shipping.free ? "¡Gratis! 🖤" : "Sin cargo";
+    } else {
+      cartShippingEl.textContent = fmt(shipping.price);
+    }
+    var total = subtotal + (shipping && shipping.price ? shipping.price : 0);
+    cartTotalEl.textContent = fmt(total);
+    return { subtotal:subtotal, shipping:shipping, total:total };
+  }
+
   function renderCart(){
-    var count = cart.reduce(function(s,i){ return s + i.qty; }, 0);
+    var count = cartCount();
     cartCountEls.forEach(function(el){ el.textContent = count; el.dataset.empty = count === 0 ? "true" : "false"; });
 
     if(cart.length === 0){
       drawerBody.innerHTML = '<p class="drawer__empty">Todavía no agregaste nada.<br>Elegí tus piezas en la colección 🖤</p>';
       drawerFields.hidden = true;
       checkoutBtn.disabled = true;
+      cartSubtotalEl.textContent = fmt(0);
+      cartShippingEl.textContent = "Elegí cómo recibís tu pedido";
       cartTotalEl.textContent = fmt(0);
       return;
     }
 
     drawerFields.hidden = false;
     drawerBody.innerHTML = "";
-    var total = 0;
     cart.forEach(function(item){
-      total += item.price * item.qty;
       var meta = [];
       if(item.size) meta.push("Talle " + item.size);
       if(item.color) meta.push(item.color);
@@ -1539,24 +1604,33 @@
       row.querySelector('.cart-item__remove').addEventListener("click", function(){ removeItem(item.key); });
       drawerBody.appendChild(row);
     });
-    cartTotalEl.textContent = fmt(total);
+    updateTotals();
     checkoutBtn.disabled = false;
   }
+
+  fieldZone.addEventListener("change", updateTotals);
 
   checkoutBtn.addEventListener("click", function(){
     if(cart.length === 0) return;
     var name = document.getElementById("fieldName").value.trim();
     var loc = document.getElementById("fieldLocation").value.trim();
+    var totals = updateTotals();
     var lines = ["¡Hola ATAJ! Quiero hacer este pedido:", ""];
-    var total = 0;
     cart.forEach(function(item){
-      total += item.price * item.qty;
       var meta = [];
       if(item.size) meta.push("Talle " + item.size);
       if(item.color) meta.push(item.color);
       lines.push("• " + item.name + (meta.length ? " (" + meta.join(", ") + ")" : "") + " x" + item.qty + " — " + fmt(item.price * item.qty));
     });
-    lines.push("", "Total: " + fmt(total));
+    lines.push("", "Subtotal: " + fmt(totals.subtotal));
+    if(totals.shipping){
+      if(totals.shipping.price === null){
+        lines.push("Envío: " + totals.shipping.label + " (a cotizar por Andreani)");
+      } else {
+        lines.push("Envío (" + totals.shipping.label + "): " + (totals.shipping.price === 0 ? "sin cargo" : fmt(totals.shipping.price)));
+      }
+    }
+    lines.push("Total: " + fmt(totals.total) + (totals.shipping && totals.shipping.price === null ? " + envío a cotizar" : ""));
     if(name) lines.push("", "Nombre: " + name);
     if(loc) lines.push("Localidad/dirección: " + loc);
     var url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(lines.join("\n"));
