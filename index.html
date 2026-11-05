@@ -533,12 +533,13 @@
   .drawer__head h3{ font-size:1.1rem; letter-spacing:.02em; }
   .drawer__close{ background:none; border:none; color:var(--bone-dim); cursor:pointer; font-size:1.4rem; line-height:1; padding:.2rem; }
   .drawer__close:hover{ color:var(--rose); }
-  .drawer__body{ flex:1; overflow-y:auto; padding:1.1rem 1.4rem; display:flex; flex-direction:column; gap:1.1rem; }
+  .drawer__scroll{ flex:1; overflow-y:auto; }
+  .drawer__body{ padding:1.3rem 1.4rem; display:flex; flex-direction:column; gap:1.4rem; }
   .drawer__empty{ color:var(--bone-dim); font-size:.9rem; text-align:center; padding:3rem 1rem; }
 
-  .cart-item{ display:grid; grid-template-columns:56px 1fr auto; gap:.85rem; align-items:flex-start; }
-  .cart-item img{ width:56px; height:70px; object-fit:cover; border:1px solid var(--line); }
-  .cart-item__name{ font-size:.9rem; font-weight:700; }
+  .cart-item{ display:grid; grid-template-columns:68px 1fr auto; gap:1rem; align-items:flex-start; }
+  .cart-item img{ width:68px; height:85px; object-fit:cover; border:1px solid var(--line); border-radius:4px; }
+  .cart-item__name{ font-size:.95rem; font-weight:700; }
   .cart-item__meta{ font-size:.75rem; color:var(--bone-dim); margin-top:.2rem; }
   .cart-item__price{ font-size:.82rem; color:var(--rose); margin-top:.35rem; font-weight:700; font-variant-numeric:tabular-nums; }
   .qty{ display:flex; align-items:center; gap:.5rem; margin-top:.5rem; }
@@ -548,7 +549,7 @@
   .cart-item__remove{ background:none; border:none; color:var(--bone-dim); cursor:pointer; font-size:1rem; padding:.1rem; }
   .cart-item__remove:hover{ color:var(--rose); }
 
-  .drawer__fields{ display:flex; flex-direction:column; gap:.7rem; padding:0 1.4rem 1rem; }
+  .drawer__fields{ display:flex; flex-direction:column; gap:.7rem; padding:1.2rem 1.4rem 1.2rem; border-top:1px solid var(--line); margin-top:.2rem; }
   .drawer__fields input, .drawer__fields select{
     background:var(--ink-3); border:1px solid var(--line-strong); color:var(--bone);
     border-radius:8px; padding:.7rem .85rem; font-size:.85rem; font-family:inherit;
@@ -801,6 +802,7 @@
     <h3>Tu pedido</h3>
     <button class="drawer__close" id="drawerCloseBtn" aria-label="Cerrar carrito">×</button>
   </div>
+  <div class="drawer__scroll">
   <div class="drawer__body" id="drawerBody"></div>
   <div class="drawer__fields" id="drawerFields" hidden>
     <input type="text" id="fieldName" placeholder="Tu nombre">
@@ -832,6 +834,7 @@
       </div>
       <p>Enviá el comprobante de la transferencia por WhatsApp — el pedido se confirma con la seña acreditada.</p>
     </div>
+  </div>
   </div>
   <div class="drawer__foot">
     <div class="totals totals--sub"><span>Subtotal</span><span id="cartSubtotal">$0</span></div>
