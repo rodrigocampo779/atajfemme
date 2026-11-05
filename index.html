@@ -450,6 +450,24 @@
   .review-cta p{ color:var(--bone-dim); margin-top:.8rem; font-size:.95rem; }
   .review-cta .btn{ margin-top:1.6rem; }
 
+  /* ---------- payment info ---------- */
+  .payment-info{
+    max-width:40rem; margin-inline:auto; padding:2.5rem 2rem;
+    border:1px solid var(--line-strong); border-radius:20px;
+    background:linear-gradient(160deg, var(--ink-2), var(--ink-3));
+  }
+  .payment-info__mark{ width:1.8rem; height:1.8rem; color:var(--rose); margin-bottom:.8rem; }
+  .payment-info h2{ font-family:var(--font-gothic); font-weight:400; font-size:1.8rem; }
+  .payment-info p{ color:var(--bone-dim); margin-top:.8rem; font-size:.92rem; line-height:1.6; }
+  .payment-info__transfer{
+    margin-top:1.4rem; padding:1.1rem 1.3rem; border:1px solid var(--rose-deep); border-radius:12px;
+    background:var(--ink-3);
+  }
+  .payment-info__transfer h4{ font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--rose); margin-bottom:.6rem; font-weight:700; }
+  .payment-info__transfer p{ margin:.3rem 0 0; font-size:.92rem; color:var(--bone); }
+  .payment-info__transfer strong{ color:var(--bone-dim); font-weight:600; margin-right:.3rem; }
+  .payment-info__note{ font-size:.82rem; margin-top:1.2rem; }
+
   /* ---------- footer ---------- */
   footer{ border-top:1px solid var(--line); padding-block:3.5rem 2rem; margin-top:2rem; }
   .foot-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:2.5rem; }
@@ -720,6 +738,23 @@
       <h2>¿Ya compraste en ATAJ Femme?</h2>
       <p>Tu experiencia puede ayudar a otras personas a elegir con más confianza 💛</p>
       <a class="btn btn--primary" href="https://wa.me/5491125645400?text=Hola%21%20Quiero%20dejarles%20mi%20rese%C3%B1a%20sobre%20mi%20compra%20en%20ATAJ%20Femme%20%F0%9F%92%9B" target="_blank" rel="noopener">Dejar mi reseña ⭐</a>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"><svg class="hw"><use href="#heart-wire"/></svg></div>
+
+  <section class="wrap">
+    <div class="payment-info reveal">
+      <svg class="hw payment-info__mark"><use href="#heart-wire"/></svg>
+      <h2>Medios de pago 🖤</h2>
+      <p>Aceptamos efectivo, Mercado Pago y transferencia bancaria.</p>
+      <p>Para confirmar tu pedido, aboná el 50% de seña. El saldo restante podés pagarlo contraentrega.</p>
+      <div class="payment-info__transfer">
+        <h4>Datos para transferir</h4>
+        <p><strong>Alias:</strong> atajfemme</p>
+        <p><strong>Titular:</strong> Aylén Andrea Molina</p>
+      </div>
+      <p class="payment-info__note">Una vez realizada la transferencia, envianos el comprobante por WhatsApp. Los pedidos se confirman únicamente con la seña acreditada.</p>
     </div>
   </section>
 </main>
