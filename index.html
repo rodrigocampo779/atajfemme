@@ -203,7 +203,7 @@
 
   /* ---------- section shell ---------- */
   section{ padding-block:5rem; }
-  #tienda{ padding-top:1.5rem; }
+  #tienda{ padding-top:1.5rem; scroll-margin-top:calc(var(--announce-h) + 5rem); }
   .sec-head{
     display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:1.5rem;
     margin-bottom:3rem;
@@ -225,6 +225,13 @@
     display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
     gap:1rem; margin-bottom:2.5rem; padding-bottom:1.5rem; border-bottom:1px solid var(--line);
   }
+  .deep-link-banner{
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem;
+    margin-bottom:2.5rem; padding:1rem 1.3rem; border:1px solid var(--line-strong); border-radius:12px;
+    background:var(--ink-2);
+  }
+  .deep-link-banner span{ font-size:.9rem; color:var(--bone-dim); }
+  .deep-link-banner strong{ color:var(--bone); }
   .search-field{ display:flex; align-items:center; justify-content:flex-end; gap:.5rem; }
   .search-field input{
     width:0; min-width:0; opacity:0; padding:0; margin:0; border:none; background:transparent; color:var(--bone);
@@ -357,13 +364,7 @@
   }
   .lightbox__close:hover{ border-color:var(--rose); color:var(--rose); }
 
-  .piece__body{ padding-top:1.1rem; border-top:1px solid var(--line); margin-top:1.1rem; flex:1; display:flex; flex-direction:column; scroll-margin-top:calc(var(--announce-h) + 6rem); }
-  .piece.is-deep-linked .piece__body{ animation:deepLinkGlow 1.8s var(--ease); }
-  @keyframes deepLinkGlow{
-    0%{ box-shadow:0 0 0 0 rgba(188,129,135,0); }
-    15%{ box-shadow:0 0 0 3px rgba(188,129,135,.55); }
-    100%{ box-shadow:0 0 0 0 rgba(188,129,135,0); }
-  }
+  .piece__body{ padding-top:1.1rem; border-top:1px solid var(--line); margin-top:1.1rem; flex:1; display:flex; flex-direction:column; }
   .piece__head{ display:flex; align-items:baseline; justify-content:space-between; gap:.75rem; }
   .piece__head h3{ font-size:var(--fs-h3); font-weight:600; }
   .piece__price{ font-family:var(--font-display); font-weight:700; font-size:1.05rem; color:var(--rose); white-space:nowrap; font-variant-numeric:tabular-nums; }
@@ -697,7 +698,7 @@
       </div>
     </div>
 
-    <div class="shop-filters reveal">
+    <div class="shop-filters reveal" id="shopFilters">
       <div class="filter-cats" id="filterCats" role="group" aria-label="Filtrar por categoría">
         <button type="button" class="pill is-active" data-cat="all">Todos</button>
         <button type="button" class="pill" data-cat="ofertas">Ofertas</button>
@@ -716,6 +717,11 @@
           <svg class="hw"><use href="#icon-search"/></svg>
         </button>
       </div>
+    </div>
+
+    <div class="deep-link-banner" id="deepLinkBanner" hidden>
+      <span>Mostrando <strong id="deepLinkBannerName"></strong></span>
+      <button type="button" class="btn btn--ghost" id="deepLinkBackBtn">Ver toda la colección</button>
     </div>
 
     <div class="shop-grid" id="shopGrid"></div>
@@ -1516,17 +1522,42 @@
   });
 
   /* ---------- link directo a un producto (ej. desde Instagram) ---------- */
+  var shopFiltersEl = document.getElementById("shopFilters");
+  var deepLinkBanner = document.getElementById("deepLinkBanner");
+  var deepLinkBannerName = document.getElementById("deepLinkBannerName");
+  var deepLinkBackBtn = document.getElementById("deepLinkBackBtn");
+
+  function showOnlyProduct(id){
+    var product = PRODUCTS.filter(function(p){ return p.id === id; })[0];
+    var card = document.getElementById("p-" + id);
+    if(!product || !card) return false;
+    cardEntries.forEach(function(entry){ entry.card.hidden = (entry.card !== card); });
+    shopEmpty.hidden = true;
+    shopFiltersEl.hidden = true;
+    deepLinkBannerName.textContent = product.name;
+    deepLinkBanner.hidden = false;
+    return true;
+  }
+
+  function showAllProducts(){
+    shopFiltersEl.hidden = false;
+    deepLinkBanner.hidden = true;
+    applyFilters();
+  }
+
+  deepLinkBackBtn.addEventListener("click", function(){
+    history.replaceState(null, "", location.pathname + location.search);
+    showAllProducts();
+    document.getElementById("tienda").scrollIntoView({ behavior:"smooth", block:"start" });
+  });
+
   if(location.hash.indexOf("#p-") === 0){
     var deepLinkId = location.hash.slice(3);
-    var deepLinkProduct = PRODUCTS.filter(function(p){ return p.id === deepLinkId; })[0];
-    var deepLinkCard = document.getElementById("p-" + deepLinkId);
-    if(deepLinkProduct && deepLinkCard){
-      setTimeout(function(){
-        deepLinkCard.classList.add("is-deep-linked");
-        var infoBlock = deepLinkCard.querySelector(".piece__body") || deepLinkCard;
-        infoBlock.scrollIntoView({ behavior:"smooth", block:"start" });
-      }, 300);
-    }
+    setTimeout(function(){
+      if(showOnlyProduct(deepLinkId)){
+        document.getElementById("tienda").scrollIntoView({ behavior:"smooth", block:"start" });
+      }
+    }, 300);
   }
 
   /* ---------- búsqueda y filtro por categoría ---------- */
