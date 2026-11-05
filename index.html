@@ -459,6 +459,21 @@
   .drawer__payment p{ font-size:.82rem; color:var(--bone-dim); line-height:1.5; }
   .drawer__payment p + p{ margin-top:.5rem; }
   .drawer__payment strong{ color:var(--bone); font-weight:700; }
+  .drawer__payment-row{
+    display:flex; align-items:center; justify-content:space-between; gap:.6rem;
+    margin-top:.6rem; padding:.55rem .7rem; border:1px solid var(--line-strong); border-radius:8px;
+    background:var(--ink-2);
+  }
+  .drawer__payment-row > div{ display:flex; flex-direction:column; min-width:0; }
+  .drawer__payment-label{ font-size:.65rem; letter-spacing:.08em; text-transform:uppercase; color:var(--bone-dim); }
+  .drawer__payment-value{ font-size:.85rem; color:var(--bone); font-weight:700; overflow-wrap:anywhere; }
+  .drawer__payment-copy{
+    flex-shrink:0; appearance:none; cursor:pointer; background:var(--ink-3); border:1px solid var(--line-strong);
+    color:var(--bone-dim); border-radius:7px; width:2rem; height:2rem; display:flex; align-items:center; justify-content:center;
+    transition:border-color .2s ease, color .2s ease;
+  }
+  .drawer__payment-copy:hover{ border-color:var(--rose); color:var(--rose); }
+  .drawer__payment-copy .hw{ width:.85rem; height:.85rem; }
 
   /* ---------- footer ---------- */
   footer{ border-top:1px solid var(--line); padding-block:3.5rem 2rem; margin-top:2rem; }
@@ -597,6 +612,10 @@
   </symbol>
   <symbol id="icon-chevron" viewBox="0 0 24 24">
     <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="icon-copy" viewBox="0 0 24 24">
+    <rect x="9" y="9" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
   </symbol>
   <symbol id="icon-whatsapp" viewBox="0 0 24 24">
     <path fill="currentColor" d="M12.01 2C6.49 2 2 6.47 2 11.98c0 1.98.58 3.83 1.58 5.4L2 22l4.78-1.53a10 10 0 0 0 5.23 1.47h.01c5.52 0 10-4.47 10-9.97C22 6.47 17.53 2 12.01 2Zm5.84 14.16c-.25.69-1.24 1.27-1.98 1.43-.53.11-1.22.2-3.55-.76-2.98-1.23-4.9-4.24-5.05-4.44-.15-.2-1.21-1.6-1.21-3.06 0-1.45.75-2.17 1.03-2.46.25-.27.63-.39.98-.39.12 0 .22 0 .32.01.29.01.43.02.63.5.24.58.82 2.01.9 2.15.07.15.12.32.02.52-.1.2-.15.32-.29.49-.15.17-.3.38-.44.51-.15.14-.3.3-.13.58.17.29.77 1.27 1.65 2.06 1.13 1.01 2.09 1.33 2.38 1.48.29.15.46.13.63-.07.17-.2.72-.84.92-1.13.19-.29.39-.24.64-.14.25.1 1.62.76 1.9.9.28.14.46.21.53.33.07.12.07.68-.18 1.37Z"/>
@@ -799,7 +818,18 @@
     <div class="drawer__payment">
       <h4>Medios de pago</h4>
       <p>Efectivo, Mercado Pago o transferencia. Para confirmar el pedido se abona el 50% de seña; el resto se paga contraentrega.</p>
-      <p><strong>Alias:</strong> atajfemme<br><strong>Titular:</strong> Aylén Andrea Molina</p>
+      <div class="drawer__payment-row" data-copy="atajfemme">
+        <div><span class="drawer__payment-label">Alias</span><span class="drawer__payment-value">atajfemme</span></div>
+        <button type="button" class="drawer__payment-copy" aria-label="Copiar alias"><svg class="hw"><use href="#icon-copy"/></svg></button>
+      </div>
+      <div class="drawer__payment-row" data-copy="0000003100052548198077">
+        <div><span class="drawer__payment-label">CVU</span><span class="drawer__payment-value">0000003100052548198077</span></div>
+        <button type="button" class="drawer__payment-copy" aria-label="Copiar CVU"><svg class="hw"><use href="#icon-copy"/></svg></button>
+      </div>
+      <div class="drawer__payment-row" data-copy="Aylén Andrea Molina">
+        <div><span class="drawer__payment-label">Nombre</span><span class="drawer__payment-value">Aylén Andrea Molina</span></div>
+        <button type="button" class="drawer__payment-copy" aria-label="Copiar nombre"><svg class="hw"><use href="#icon-copy"/></svg></button>
+      </div>
       <p>Enviá el comprobante de la transferencia por WhatsApp — el pedido se confirma con la seña acreditada.</p>
     </div>
   </div>
@@ -1257,6 +1287,20 @@
       window.prompt("Copiá el enlace:", url);
     }
   }
+
+  function copyText(text, label){
+    function done(){ showToast((label || "Dato") + " copiado"); }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done).catch(function(){ window.prompt("Copiá:", text); });
+    } else {
+      window.prompt("Copiá:", text);
+    }
+  }
+  document.querySelectorAll(".drawer__payment-row").forEach(function(row){
+    row.querySelector(".drawer__payment-copy").addEventListener("click", function(){
+      copyText(row.dataset.copy, row.querySelector(".drawer__payment-label").textContent);
+    });
+  });
 
   PRODUCTS.forEach(function(p){
     var hasVariants = !!p.variants;
