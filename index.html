@@ -841,6 +841,7 @@
     </select>
     <p class="drawer__ship-hint">Envío gratis a todo CABA a partir de 3 prendas, y a todo destino en compras desde $50.000.</p>
     <input type="text" id="fieldLocation" placeholder="Localidad / dirección de envío">
+    <input type="text" id="fieldZip" placeholder="Código postal">
     <div class="drawer__payment">
       <h4>Medios de pago</h4>
       <p>Efectivo, Mercado Pago o transferencia. Para confirmar el pedido se abona el 50% de seña; el resto se paga contraentrega.</p>
@@ -1778,6 +1779,7 @@
     if(cart.length === 0) return;
     var name = document.getElementById("fieldName").value.trim();
     var loc = document.getElementById("fieldLocation").value.trim();
+    var zip = document.getElementById("fieldZip").value.trim();
     var totals = updateTotals();
     var lines = ["¡Hola ATAJ! Quiero hacer este pedido:", ""];
     cart.forEach(function(item){
@@ -1797,6 +1799,7 @@
     lines.push("Total: " + fmt(totals.total) + (totals.shipping && totals.shipping.price === null ? " + envío a cotizar" : ""));
     if(name) lines.push("", "Nombre: " + name);
     if(loc) lines.push("Localidad/dirección: " + loc);
+    if(zip) lines.push("Código postal: " + zip);
     var url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(lines.join("\n"));
     window.open(url, "_blank", "noopener");
   });
