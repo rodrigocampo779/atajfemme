@@ -1784,6 +1784,7 @@
       if(item.size) meta.push("Talle " + item.size);
       if(item.color) meta.push(item.color);
       lines.push("• " + item.name + (meta.length ? " (" + meta.join(", ") + ")" : "") + " x" + item.qty + " — " + fmt(item.price * item.qty));
+      lines.push(location.origin + "/p/" + item.id + ".html");
     });
     lines.push("", "Subtotal: " + fmt(totals.subtotal));
     if(totals.shipping){
