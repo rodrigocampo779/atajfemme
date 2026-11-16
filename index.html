@@ -248,6 +248,24 @@
     .filter-cats .pill{ flex:none; }
     .search-field{ flex:none; }
   }
+  #como-comprar{ scroll-margin-top:calc(var(--announce-h) + 5rem); }
+  .howto-steps{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(4,1fr); gap:1.25rem; }
+  .howto-step{ background:var(--ink-2); border:1px solid var(--line); border-radius:16px; padding:1.3rem 1.2rem; }
+  .howto-step__num{ display:block; font-family:var(--font-gothic); font-size:2.2rem; line-height:1; color:var(--rose); }
+  .howto-step h3{ margin-top:.6rem; font-size:1rem; }
+  .howto-step p{ margin-top:.4rem; color:var(--bone-dim); font-size:.88rem; line-height:1.45; }
+  .howto-info{ display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; margin-top:1.25rem; }
+  .howto-info > div{ border:1px dashed var(--rose); border-radius:16px; padding:1.2rem 1.3rem; }
+  .howto-info h4{ font-family:var(--font-gothic); font-weight:400; font-size:1.4rem; color:var(--rose); margin:0 0 .4rem; }
+  .howto-info p{ color:var(--bone-dim); font-size:.9rem; line-height:1.5; margin:.25rem 0 0; }
+  .howto-info strong{ color:var(--bone); }
+  .howto-help{ margin-top:1.4rem; text-align:center; color:var(--bone-dim); font-size:.9rem; }
+  .howto-help a{ color:var(--rose); }
+  @media (max-width:900px){ .howto-steps{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:560px){
+    .howto-steps{ grid-template-columns:1fr; gap:.8rem; }
+    .howto-info{ grid-template-columns:1fr; gap:.8rem; }
+  }
   .shop-empty{ text-align:center; color:var(--bone-dim); font-size:.9rem; padding:3.5rem 1rem; }
 
   /* ---------- testimonios ---------- */
@@ -672,6 +690,7 @@
   </a>
   <ul class="nav-links">
     <li><a href="#tienda">Colección</a></li>
+    <li><a href="#como-comprar">Cómo comprar</a></li>
     <li><a href="#instagram">Instagram</a></li>
     <li><a href="#nosotras">Mi historia</a></li>
   </ul>
@@ -729,6 +748,49 @@
 
     <div class="shop-grid" id="shopGrid"></div>
     <p class="shop-empty" id="shopEmpty" hidden>No encontramos piezas con ese filtro. Probá con otra búsqueda o categoría.</p>
+  </section>
+
+  <div class="divider" aria-hidden="true"><svg class="hw"><use href="#heart-wire"/></svg></div>
+
+  <section id="como-comprar" class="wrap">
+    <div class="sec-head reveal">
+      <div><h2>Cómo comprar 🖤</h2></div>
+    </div>
+    <ol class="howto-steps reveal">
+      <li class="howto-step">
+        <span class="howto-step__num">1</span>
+        <h3>Elegí tu prenda</h3>
+        <p>Tocá el color y después el talle. En "Ver medidas" tenés las medidas de cada talle.</p>
+      </li>
+      <li class="howto-step">
+        <span class="howto-step__num">2</span>
+        <h3>Agregala al carrito</h3>
+        <p>Sumá todas las que quieras. Las promos, como la Promo Vintage, se aplican solas.</p>
+      </li>
+      <li class="howto-step">
+        <span class="howto-step__num">3</span>
+        <h3>Completá tus datos</h3>
+        <p>En el carrito poné tu nombre y elegí cómo lo recibís: retiro sin cargo en Ramos Mejía o envío.</p>
+      </li>
+      <li class="howto-step">
+        <span class="howto-step__num">4</span>
+        <h3>Finalizá por WhatsApp</h3>
+        <p>Se abre WhatsApp con tu pedido ya armado. Lo mandás y coordinamos el pago.</p>
+      </li>
+    </ol>
+    <div class="howto-info reveal">
+      <div>
+        <h4>Envíos</h4>
+        <p>CABA $4.500 · Gran Buenos Aires desde $5.600 · Interior por Andreani, a cotizar.</p>
+        <p><strong>Gratis</strong> a todo CABA desde 3 prendas, y a cualquier destino en compras desde $50.000.</p>
+      </div>
+      <div>
+        <h4>Pagos</h4>
+        <p>Efectivo, Mercado Pago o transferencia.</p>
+        <p>El pedido se confirma con el <strong>50% de seña</strong>; el resto se paga contraentrega.</p>
+      </div>
+    </div>
+    <p class="howto-help">¿Dudas con el talle o el envío? <a href="https://wa.me/5491125645400" target="_blank" rel="noopener">Escribinos por WhatsApp</a></p>
   </section>
 
   <div class="divider" aria-hidden="true"><svg class="hw"><use href="#heart-wire"/></svg></div>
@@ -794,6 +856,7 @@
         <h4>Explorar</h4>
         <ul>
           <li><a href="#tienda">Colección</a></li>
+          <li><a href="#como-comprar">Cómo comprar</a></li>
           <li><a href="#instagram">Instagram</a></li>
           <li><a href="#nosotras">Mi historia</a></li>
         </ul>
