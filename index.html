@@ -272,6 +272,7 @@
 
   /* ---------- shop grid ---------- */
   .shop-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.75rem; }
+  .shop-grid:not(.is-filtered) .piece--row-start{ grid-column-start:1; }
   .piece{ display:flex; flex-direction:column; }
   .piece--wide{ grid-column:span 2; }
   @media (max-width:900px){ .shop-grid{ grid-template-columns:repeat(2,1fr); } }
@@ -1378,7 +1379,7 @@
     });
   });
 
-  PRODUCTS.forEach(function(p){
+  PRODUCTS.forEach(function(p, idx){
     var hasVariants = !!p.variants;
     selections[p.id] = {
       size: (!hasVariants && p.sizes.length === 1) ? p.sizes[0] : null,
@@ -1387,6 +1388,7 @@
 
     var card = document.createElement("article");
     card.className = "piece piece--" + p.size + " reveal";
+    if(idx > 0 && PRODUCTS[idx - 1].promo && !p.promo) card.classList.add("piece--row-start");
     card.id = "p-" + p.id;
 
     var sizesHTML = "";
@@ -1628,6 +1630,7 @@
       entry.card.hidden = !show;
       if(show) visible++;
     });
+    grid.classList.toggle("is-filtered", activeCat !== "all" || q !== "");
     shopEmpty.hidden = visible > 0;
   }
 
