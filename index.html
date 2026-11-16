@@ -390,9 +390,13 @@
   .measures__table td{ color:var(--bone); font-variant-numeric:tabular-nums; }
   .measures__table tr:last-child td{ border-bottom:none; }
   .piece__desc{ margin-top:.4rem; color:var(--bone-dim); font-size:.88rem; }
-  .piece__promo{ margin-top:.6rem; padding:.5rem .7rem; border:1px dashed var(--rose); border-radius:10px; font-size:.82rem; line-height:1.35; color:var(--bone); }
-  .piece__promo strong{ color:var(--rose); }
-  .piece__promo small{ display:block; margin-top:.2rem; font-size:.72rem; color:var(--bone-dim); }
+  .piece__promo{
+    margin:.7rem 0 .3rem; padding:.6rem .8rem; border-radius:12px; font-size:.84rem; line-height:1.35; font-weight:600;
+    background:linear-gradient(135deg,#ffd6e6,#ff8fb3); color:#5e1a34;
+    box-shadow:0 6px 18px -6px rgba(255,143,179,.6);
+  }
+  .piece__promo strong{ font-weight:800; }
+  .piece__promo small{ display:block; margin-top:.2rem; font-size:.73rem; font-weight:500; color:#7a2a49; }
 
   .pillrow{ display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.9rem; }
   .pillrow-label{ font-size:.68rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--bone-dim); width:100%; margin-top:.7rem; }
