@@ -256,7 +256,17 @@
   .howto-step p{ margin-top:.4rem; color:var(--bone-dim); font-size:.88rem; line-height:1.45; }
   .howto-info{ display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; margin-top:1.25rem; }
   .howto-info > div{ border:1px dashed var(--rose); border-radius:16px; padding:1.2rem 1.3rem; }
-  .howto-info h4{ font-family:var(--font-gothic); font-weight:400; font-size:1.4rem; color:var(--rose); margin:0 0 .4rem; }
+  .howto-policy{
+    display:grid; grid-template-columns:1.6fr 1fr; gap:1.5rem; margin-top:1.25rem;
+    border:1px dashed var(--rose); border-radius:16px; padding:1.2rem 1.3rem;
+    scroll-margin-top:calc(var(--announce-h) + 5rem);
+  }
+  .howto-policy ul{ margin:0; padding-left:1.1rem; color:var(--bone-dim); font-size:.9rem; line-height:1.5; }
+  .howto-policy li + li{ margin-top:.35rem; }
+  .howto-policy strong{ color:var(--bone); }
+  .howto-policy .howto-checks{ list-style:none; padding-left:0; }
+  .howto-checks li::before{ content:"✓"; color:var(--rose); font-weight:800; margin-right:.5rem; }
+  .howto-info h4, .howto-policy h4{ font-family:var(--font-gothic); font-weight:400; font-size:1.4rem; color:var(--rose); margin:0 0 .4rem; }
   .howto-info p{ color:var(--bone-dim); font-size:.9rem; line-height:1.5; margin:.25rem 0 0; }
   .howto-info strong{ color:var(--bone); }
   .howto-help{ margin-top:1.4rem; text-align:center; color:var(--bone-dim); font-size:.9rem; }
@@ -265,6 +275,7 @@
   @media (max-width:560px){
     .howto-steps{ grid-template-columns:1fr; gap:.8rem; }
     .howto-info{ grid-template-columns:1fr; gap:.8rem; }
+    .howto-policy{ grid-template-columns:1fr; gap:1rem; margin-top:.8rem; }
   }
   .shop-empty{ text-align:center; color:var(--bone-dim); font-size:.9rem; padding:3.5rem 1rem; }
 
@@ -798,6 +809,25 @@
         <p>El pedido se confirma con el <strong>50% de seña</strong>; el resto se paga contraentrega.</p>
       </div>
     </div>
+    <div class="howto-policy reveal" id="cambios">
+      <div>
+        <h4>Cambios</h4>
+        <ul>
+          <li>Podés cambiar por otro talle u otra prenda en stock dentro de los <strong>5 días</strong> posteriores a la compra.</li>
+          <li>El cambio se hace en el punto de retiro (Ramos Mejía) o por envío a tu cargo.</li>
+          <li><strong>No hacemos devoluciones de dinero.</strong></li>
+          <li>Las prendas talle único y las de temporadas pasadas o en oferta no tienen cambio.</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Condiciones</h4>
+        <ul class="howto-checks">
+          <li>Sin uso</li>
+          <li>Sin manchas, roturas ni alteraciones</li>
+          <li>Con su envoltorio y etiquetas originales</li>
+        </ul>
+      </div>
+    </div>
     <p class="howto-help">¿Dudas con el talle o el envío? <a href="https://wa.me/5491125645400" target="_blank" rel="noopener">Escribinos por WhatsApp</a></p>
   </section>
 
@@ -865,6 +895,7 @@
         <ul>
           <li><a href="#tienda">Colección</a></li>
           <li><a href="#como-comprar">Cómo comprar</a></li>
+          <li><a href="#cambios">Cambios</a></li>
           <li><a href="#instagram">Instagram</a></li>
           <li><a href="#nosotras">Mi historia</a></li>
         </ul>
