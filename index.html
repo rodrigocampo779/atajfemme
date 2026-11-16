@@ -256,10 +256,10 @@
   .howto-step p{ margin-top:.4rem; color:var(--bone-dim); font-size:.88rem; line-height:1.45; }
   .howto-info{ display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; margin-top:1.25rem; }
   .howto-info > div{ border:1px dashed var(--rose); border-radius:16px; padding:1.2rem 1.3rem; }
+  #cambios{ scroll-margin-top:calc(var(--announce-h) + 5rem); }
   .howto-policy{
-    display:grid; grid-template-columns:1.6fr 1fr; gap:1.5rem; margin-top:1.25rem;
+    display:grid; grid-template-columns:1.6fr 1fr; gap:1.5rem;
     border:1px dashed var(--rose); border-radius:16px; padding:1.2rem 1.3rem;
-    scroll-margin-top:calc(var(--announce-h) + 5rem);
   }
   .howto-policy ul{ margin:0; padding-left:1.1rem; color:var(--bone-dim); font-size:.9rem; line-height:1.5; }
   .howto-policy li + li{ margin-top:.35rem; }
@@ -275,7 +275,7 @@
   @media (max-width:560px){
     .howto-steps{ grid-template-columns:1fr; gap:.8rem; }
     .howto-info{ grid-template-columns:1fr; gap:.8rem; }
-    .howto-policy{ grid-template-columns:1fr; gap:1rem; margin-top:.8rem; }
+    .howto-policy{ grid-template-columns:1fr; gap:1rem; }
   }
   .shop-empty{ text-align:center; color:var(--bone-dim); font-size:.9rem; padding:3.5rem 1rem; }
 
@@ -710,6 +710,7 @@
   <ul class="nav-links">
     <li><a href="#tienda">Colección</a></li>
     <li><a href="#como-comprar">Cómo comprar</a></li>
+    <li><a href="#cambios">Cambios</a></li>
     <li><a href="#instagram">Instagram</a></li>
     <li><a href="#nosotras">Mi historia</a></li>
   </ul>
@@ -809,9 +810,18 @@
         <p>El pedido se confirma con el <strong>50% de seña</strong>; el resto se paga contraentrega.</p>
       </div>
     </div>
-    <div class="howto-policy reveal" id="cambios">
+    <p class="howto-help">¿Dudas con el talle o el envío? <a href="https://wa.me/5491125645400" target="_blank" rel="noopener">Escribinos por WhatsApp</a></p>
+  </section>
+
+  <div class="divider" aria-hidden="true"><svg class="hw"><use href="#heart-wire"/></svg></div>
+
+  <section id="cambios" class="wrap">
+    <div class="sec-head reveal">
+      <div><h2>Cambios 🖤</h2></div>
+    </div>
+    <div class="howto-policy reveal">
       <div>
-        <h4>Cambios</h4>
+        <h4>¿Cómo funcionan?</h4>
         <ul>
           <li>Podés cambiar por otro talle u otra prenda en stock dentro de los <strong>5 días</strong> posteriores a la compra.</li>
           <li>El cambio se hace en el punto de retiro (Ramos Mejía) o por envío a tu cargo.</li>
@@ -828,7 +838,7 @@
         </ul>
       </div>
     </div>
-    <p class="howto-help">¿Dudas con el talle o el envío? <a href="https://wa.me/5491125645400" target="_blank" rel="noopener">Escribinos por WhatsApp</a></p>
+    <p class="howto-help">¿Querés hacer un cambio? <a href="https://wa.me/5491125645400?text=Hola%21%20Quiero%20hacer%20un%20cambio%20%F0%9F%96%A4" target="_blank" rel="noopener">Escribinos por WhatsApp</a></p>
   </section>
 
   <div class="divider" aria-hidden="true"><svg class="hw"><use href="#heart-wire"/></svg></div>
