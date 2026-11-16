@@ -159,15 +159,11 @@
   }
   .hero h1 em{ font-style:normal; color:var(--rose); }
   .hero-sub{ margin-top:1.5rem; max-width:34rem; color:var(--bone-dim); font-size:1.05rem; }
-  .hero-cta{ display:flex; flex-wrap:wrap; align-items:center; gap:1.6rem; margin-top:2.2rem; }
   @media (max-width:760px){
     .hero{ padding-top:calc(6rem + var(--announce-h)); padding-bottom:1rem; display:flex; align-items:center; }
     .hero-inner{ margin-inline:auto; text-align:center; }
     .hero-sub{ margin-inline:auto; }
-    .hero-cta{ justify-content:center; }
   }
-  .ig-inline{ font-family:var(--font-gothic); display:inline-flex; align-items:center; gap:.5rem; font-size:1.05rem; font-weight:400; color:var(--bone); text-decoration:none; border-bottom:1px solid var(--line-strong); padding-bottom:.15rem; transition:border-color .25s var(--ease), color .25s var(--ease); }
-  .ig-inline:hover{ color:var(--rose); border-color:var(--rose); }
 
   .btn{
     appearance:none; border:none; cursor:pointer; font-family:var(--font-body);
@@ -176,7 +172,6 @@
     transition:transform .3s var(--ease), box-shadow .3s var(--ease), background .3s var(--ease);
   }
   .btn--primary{ background:linear-gradient(135deg,var(--rose),var(--rose-deep)); color:#fff; box-shadow:0 10px 30px -12px rgba(188,129,135,.55); }
-  #heroShopBtn{ font-family:var(--font-gothic); font-weight:400; font-size:1.05rem; letter-spacing:0; }
   .btn--primary:hover{ transform:translateY(-2px); box-shadow:0 16px 36px -12px rgba(188,129,135,.7); }
   .btn--primary:disabled{ opacity:.4; cursor:not-allowed; transform:none; box-shadow:none; }
   .btn--ghost{ background:transparent; color:var(--bone); border:1px solid var(--line-strong); }
@@ -696,13 +691,6 @@
     <div class="hero-inner">
       <h1>Piezas que<br>hablan <em>por vos.</em></h1>
       <p class="hero-sub">Prendas con personalidad, cómodas y versátiles que transforman cualquier outfit.</p>
-      <div class="hero-cta">
-        <button class="btn btn--primary" id="heroShopBtn">
-          <svg class="hw"><use href="#heart-wire"/></svg>
-          Ver la colección
-        </button>
-        <a class="ig-inline" href="https://instagram.com/atajfemme" target="_blank" rel="noopener">@atajfemme en Instagram →</a>
-      </div>
     </div>
   </section>
 
@@ -1921,9 +1909,6 @@
   scrim.addEventListener("click", closeDrawer);
   document.addEventListener("keydown", function(e){ if(e.key === "Escape" && drawer.classList.contains("is-open")) closeDrawer(); });
 
-  document.getElementById("heroShopBtn").addEventListener("click", function(){
-    document.getElementById("tienda").scrollIntoView({ behavior:"smooth", block:"start" });
-  });
 
   /* ---------- toast ---------- */
   var toast = document.getElementById("toast");
