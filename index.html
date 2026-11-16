@@ -161,7 +161,7 @@
   .hero-sub{ margin-top:1.5rem; max-width:34rem; color:var(--bone-dim); font-size:1.05rem; }
   .hero-cta{ display:flex; flex-wrap:wrap; align-items:center; gap:1.6rem; margin-top:2.2rem; }
   @media (max-width:760px){
-    .hero{ padding-top:calc(6rem + var(--announce-h)); padding-bottom:2.5rem; min-height:58vh; min-height:58svh; display:flex; align-items:center; }
+    .hero{ padding-top:calc(6rem + var(--announce-h)); padding-bottom:1rem; display:flex; align-items:center; }
     .hero-inner{ margin-inline:auto; text-align:center; }
     .hero-sub{ margin-inline:auto; }
     .hero-cta{ justify-content:center; }
@@ -203,19 +203,19 @@
 
   /* ---------- section shell ---------- */
   section{ padding-block:5rem; }
-  #tienda{ padding-top:1.5rem; scroll-margin-top:calc(var(--announce-h) + 5rem); }
+  #tienda{ padding-top:.5rem; scroll-margin-top:calc(var(--announce-h) + 5rem); }
   .sec-head{
     display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:1.5rem;
     margin-bottom:2rem;
   }
   .sec-head h2{
     font-family:var(--font-gothic); font-weight:400; line-height:1.15; letter-spacing:.005em;
-    margin-top:.6rem; max-width:32rem;
+    max-width:32rem; color:var(--rose);
   }
   .sec-head .kicker{ font-size:1.3rem; }
   @media (max-width:760px){
     .sec-head{ justify-content:center; text-align:center; margin-bottom:1.25rem; }
-    .sec-head h2{ margin-inline:auto; margin-top:.3rem; font-size:2rem; max-width:100%; }
+    .sec-head h2{ margin-inline:auto; font-size:2rem; max-width:100%; }
     .sec-head .kicker{ font-size:1.3rem; }
   }
   .sec-head .meta{ color:var(--bone-dim); font-size:.85rem; max-width:16rem; text-align:right; }
@@ -709,7 +709,6 @@
   <section id="tienda" class="wrap">
     <div class="sec-head reveal">
       <div>
-        <span class="kicker">la colección</span>
         <h2>Elegí tus favoritas y agregalas al carrito 🖤</h2>
       </div>
     </div>
