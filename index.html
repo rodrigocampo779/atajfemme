@@ -206,17 +206,19 @@
   #tienda{ padding-top:1.5rem; scroll-margin-top:calc(var(--announce-h) + 5rem); }
   .sec-head{
     display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:1.5rem;
-    margin-bottom:3rem;
+    margin-bottom:2rem;
   }
   .sec-head h2{
     font-family:var(--font-gothic); font-weight:400; line-height:1.15; letter-spacing:.005em;
     margin-top:.6rem; max-width:32rem;
   }
   .sec-head .kicker{ font-size:1.3rem; }
+  .sec-sub{ margin-top:.5rem; color:var(--bone-dim); font-size:.95rem; }
   @media (max-width:760px){
-    .sec-head{ justify-content:center; text-align:center; }
-    .sec-head h2{ margin-inline:auto; font-size:2.9rem; max-width:100%; }
-    .sec-head .kicker{ font-size:1.5rem; }
+    .sec-head{ justify-content:center; text-align:center; margin-bottom:1.25rem; }
+    .sec-head h2{ margin-inline:auto; margin-top:.3rem; font-size:2.2rem; max-width:100%; }
+    .sec-head .kicker{ font-size:1.3rem; }
+    .sec-sub{ font-size:.88rem; }
   }
   .sec-head .meta{ color:var(--bone-dim); font-size:.85rem; max-width:16rem; text-align:right; }
   @media (max-width:700px){ .sec-head .meta{ text-align:left; } }
@@ -246,6 +248,13 @@
   .search-field input:focus{ outline:2px solid var(--rose); outline-offset:1px; border-color:var(--rose); }
   .search-field .icon-btn[aria-expanded="true"]{ border-color:var(--rose); color:var(--rose); }
   .filter-cats{ display:flex; flex-wrap:wrap; gap:.5rem; }
+  @media (max-width:760px){
+    .shop-filters{ flex-wrap:nowrap; gap:.6rem; margin-bottom:1.25rem; padding-bottom:.9rem; }
+    .filter-cats{ flex-wrap:nowrap; flex:1; min-width:0; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+    .filter-cats::-webkit-scrollbar{ display:none; }
+    .filter-cats .pill{ flex:none; }
+    .search-field{ flex:none; }
+  }
   .shop-empty{ text-align:center; color:var(--bone-dim); font-size:.9rem; padding:3.5rem 1rem; }
 
   /* ---------- testimonios ---------- */
@@ -704,7 +713,8 @@
     <div class="sec-head reveal">
       <div>
         <span class="kicker">la colección</span>
-        <h2>Elegí tus favoritas 🖤<br>Sumalas al carrito y finalizá tu pedido por WhatsApp</h2>
+        <h2>Elegí tus favoritas 🖤</h2>
+        <p class="sec-sub">Sumalas al carrito y finalizá tu pedido por WhatsApp</p>
       </div>
     </div>
 
