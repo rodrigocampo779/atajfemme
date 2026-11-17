@@ -1026,6 +1026,24 @@
 
   var WHATSAPP_NUMBER = "5491125645400";
 
+  /* ---------- métricas (GoatCounter), solo en el dominio real ---------- */
+  if(/(^|\.)atajfemme\.com\.ar$/.test(location.hostname)){
+    var gcScript = document.createElement("script");
+    gcScript.async = true;
+    gcScript.src = "https://gc.zgo.at/count.js";
+    gcScript.setAttribute("data-goatcounter", "https://atajfemme.goatcounter.com/count");
+    document.head.appendChild(gcScript);
+  }
+  // The counter script loads async, so retry briefly until it's ready.
+  function track(path, title, tries){
+    tries = tries || 0;
+    if(window.goatcounter && window.goatcounter.count){
+      window.goatcounter.count({ path:path, title:title, event:true });
+    } else if(tries < 10){
+      setTimeout(function(){ track(path, title, tries + 1); }, 500);
+    }
+  }
+
   // Pack prices apply to any mix of products sharing the same promo key.
   var PROMOS = {
     vintage: {
@@ -1733,6 +1751,7 @@
     var deepLinkId = location.hash.slice(3);
     setTimeout(function(){
       if(showOnlyProduct(deepLinkId)){
+        track("link-directo/" + deepLinkId, "Entró por link directo");
         document.getElementById("tienda").scrollIntoView({ behavior:"smooth", block:"start" });
       }
     }, 300);
@@ -1837,6 +1856,7 @@
     persist();
     renderCart();
     showToast("Agregado: " + p.name + (size ? " · Talle " + size : "") + (color ? " · " + color : ""));
+    track("carrito/" + p.id, "Agregó al carrito: " + p.name);
   }
 
   function changeQty(key, delta){
@@ -2054,6 +2074,7 @@
     if(name) lines.push("", "Nombre: " + name);
     if(loc) lines.push("Localidad/dirección: " + loc);
     if(zip) lines.push("Código postal: " + zip);
+    track("pedido-whatsapp", "Finalizó pedido por WhatsApp");
     var url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(lines.join("\n"));
     window.open(url, "_blank", "noopener");
   });
