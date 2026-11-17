@@ -1534,7 +1534,7 @@
   var STANDARD_SIZES = ["S","M","L"];
   // Full size run of a product: S/M/L for products sized that way; otherwise its size chart plus any size a color still has.
   function sizeRange(p){
-    var range = p.measures ? Object.keys(p.measures) : [];
+    var range = p.measures ? Object.keys(p.measures).map(function(k){ return k.replace(/\s*\(.*\)$/, ""); }) : [];
     var available = p.variants ? p.variants.reduce(function(a,v){ return a.concat(v.sizes); }, []) : p.sizes;
     available.forEach(function(s){ if(range.indexOf(s) === -1) range.push(s); });
     var isStandard = range.every(function(s){ return STANDARD_SIZES.indexOf(s) !== -1; });
