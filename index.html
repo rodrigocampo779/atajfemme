@@ -1190,7 +1190,7 @@
       ]
     },
     {
-      id:"marcia", name:"Musculosa Marcia", tag:null, cat:"musculosas",
+      id:"marcia", name:"Musculosa Marcia", tag:null, cat:"musculosas", noSoldOut:true,
       desc:"Musculosa canalé (ribb) cuello alto, calce ajustado. Cada color tiene talles limitados — elegí primero el color.",
       price:11000, img:"img/p/marcia_modelo-ab8c05cd.jpg",
       alt:"Modelo con Musculosa Marcia celeste", size:"tall",
@@ -1207,7 +1207,7 @@
       ]
     },
     {
-      id:"amelie", name:"Top Amelie", tag:null, cat:"tops",
+      id:"amelie", name:"Top Amelie", tag:null, cat:"tops", noSoldOut:true,
       desc:"Musculosa en tela morley con puntilla y 2 botones al frente.",
       price:14000, img:"img/p/amelie_modelo-5b2f0485.jpg",
       alt:"Modelo con Top Amelie negro con puntilla y botones", size:"tall",
@@ -1244,7 +1244,7 @@
       sizes:["S","M"], colors:null, size:"tall"
     },
     {
-      id:"loding", name:"Baby tee Loding", tag:null, oneOnly:true, cat:"remeras",
+      id:"loding", name:"Baby tee Loding", tag:null, oneOnly:true, cat:"remeras", noSoldOut:true,
       desc:"Baby tee en tela ranglan lavado con estampa Loding.",
       price:12000, img:"img/p/loding-b36f3e8c.jpg",
       alt:"Baby tee Loding gris lavado con estampa Loding",
@@ -1254,7 +1254,7 @@
       sizes:["M"], colors:null, size:"tall"
     },
     {
-      id:"ambar", name:"Top Ámbar", tag:null, cat:"tops",
+      id:"ambar", name:"Top Ámbar", tag:null, cat:"tops", noSoldOut:true,
       desc:"Halter cuello alto con espalda abierta, en canalé. Cada color tiene talles limitados — elegí primero el color.",
       price:13500, img:"img/p/ambar_modelo-11f31193.jpg",
       alt:"Modelo con Top Ámbar azul marino, halter cuello alto", size:"tall",
@@ -1271,7 +1271,7 @@
       ]
     },
     {
-      id:"alma", name:"Musculosa Anahí", tag:null, cat:"musculosas",
+      id:"alma", name:"Musculosa Anahí", tag:null, cat:"musculosas", noSoldOut:true,
       desc:"Musculosa en tela morley con estampa floral, breteles finos.",
       price:10500, img:"img/p/alma_rosa-e066bab0.jpg",
       alt:"Modelo con Musculosa Anahí floral, breteles rosa", size:"tall",
@@ -1286,7 +1286,7 @@
       ]
     },
     {
-      id:"charlotte", name:"Top Charlotte", tag:null, oneOnly:true, cat:"tops",
+      id:"charlotte", name:"Top Charlotte", tag:null, oneOnly:true, cat:"tops", noSoldOut:true,
       desc:"Top de encaje sin mangas con cuello mao para atar.",
       price:14000, img:"img/p/charlotte_lace-15f57867.jpg",
       alt:"Top Charlotte de encaje negro con cuello mao",
@@ -1358,7 +1358,7 @@
       sizes:["S"], colors:null, size:"tall"
     },
     {
-      id:"tania", name:"Top Tania", tag:null, oneOnly:true, cat:"tops",
+      id:"tania", name:"Top Tania", tag:null, oneOnly:true, cat:"tops", noSoldOut:true,
       desc:"Top en tela satén con cierre lateral y tiras cruzadas en la espalda.",
       price:9800, img:"img/p/tania-e4f945c5.jpg",
       alt:"Top Tania chocolate, tela satén, tiras cruzadas en la espalda",
@@ -1386,7 +1386,7 @@
       sizes:["S"], colors:null, size:"tall"
     },
     {
-      id:"mia", name:"Musculosa Mia", tag:null, cat:"musculosas",
+      id:"mia", name:"Musculosa Mia", tag:null, cat:"musculosas", noSoldOut:true,
       desc:"Musculosa canalé en tela morley, espalda nadadora. Cada color tiene talles limitados — elegí primero el color.",
       price:12000, img:"img/p/mia-a989c466.jpg",
       alt:"Musculosa Mia negra, espalda nadadora", size:"tall",
@@ -1440,7 +1440,7 @@
       sizes:["S","M","L"], colors:null, size:"tall"
     },
     {
-      id:"carola", name:"Minifalda Carola", tag:"Oferta", cat:"faldas",
+      id:"carola", name:"Minifalda Carola", tag:"Oferta", cat:"faldas", noSoldOut:true,
       desc:"Minifalda escocesa en tela de paño con botones al frente.",
       price:8000, oldPrice:10000, img:"img/p/carola-b0eabc5e.jpg",
       alt:"Minifalda Carola verde escocesa con botones",
@@ -1540,6 +1540,9 @@
     var isStandard = range.every(function(s){ return STANDARD_SIZES.indexOf(s) !== -1; });
     return isStandard ? STANDARD_SIZES.slice() : range;
   }
+  function sizesToShow(p, available){
+    return p.noSoldOut ? available.slice() : sizeRange(p);
+  }
   function sizePillsHTML(range, available){
     return range.map(function(s){
       if(available.indexOf(s) === -1) return '<button type="button" class="pill pill--soldout" data-soldout="'+s+'" aria-label="Talle '+s+' agotado">'+s+'</button>';
@@ -1592,7 +1595,7 @@
       p.variants.forEach(function(v){ colorsHTML += '<button type="button" class="pill" data-color="'+v.color+'">'+v.color+'</button>'; });
       colorsHTML += '</div><p class="hint" data-hint="colors">Elegí un color</p>';
     } else {
-      var simplePills = sizePillsHTML(sizeRange(p), p.sizes);
+      var simplePills = sizePillsHTML(sizesToShow(p, p.sizes), p.sizes);
       if(p.sizes.length > 1){
         sizesHTML += '<div class="pillrow-label">Talle</div><div class="pillrow" data-role="sizes">'+simplePills+'</div>'+
           '<div class="soldout-note" data-role="soldout-note" hidden></div><p class="hint" data-hint="sizes">Elegí un talle</p>';
@@ -1679,7 +1682,7 @@
         selections[p.id].size = variant.sizes.length === 1 ? variant.sizes[0] : null;
 
         var sizesRow = card.querySelector('[data-role="sizes"]');
-        sizesRow.innerHTML = sizePillsHTML(sizeRange(p), variant.sizes);
+        sizesRow.innerHTML = sizePillsHTML(sizesToShow(p, variant.sizes), variant.sizes);
         bindSizePills();
         bindSoldOut();
         card.querySelector('[data-role="soldout-note"]').hidden = true;
