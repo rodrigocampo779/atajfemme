@@ -257,6 +257,14 @@
   .search-field input:focus{ outline:2px solid var(--rose); outline-offset:1px; border-color:var(--rose); }
   .search-field .icon-btn[aria-expanded="true"]{ border-color:var(--rose); color:var(--rose); }
   .filter-cats{ display:flex; flex-wrap:wrap; gap:.5rem; }
+  .pill--soldout{ text-decoration:line-through; opacity:.4; border-style:dashed; cursor:pointer; }
+  .pill--soldout:hover{ opacity:.7; }
+  .soldout-note{
+    margin-top:.5rem; padding:.5rem .7rem; border-radius:10px; font-size:.8rem; line-height:1.4;
+    background:var(--ink-2); border:1px solid var(--line-strong); color:var(--bone-dim);
+  }
+  .soldout-note strong{ color:var(--bone); }
+  .soldout-note a{ color:var(--rose); font-weight:700; }
   @media (max-width:760px){
     .shop-filters{ flex-wrap:nowrap; gap:.6rem; margin-bottom:1.25rem; padding-bottom:.9rem; }
     .filter-cats{ flex-wrap:nowrap; flex:1; min-width:0; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
@@ -1523,6 +1531,26 @@
     });
   });
 
+  var STANDARD_SIZES = ["S","M","L"];
+  // Full size run of a product: S/M/L for products sized that way; otherwise its size chart plus any size a color still has.
+  function sizeRange(p){
+    var range = p.measures ? Object.keys(p.measures) : [];
+    var available = p.variants ? p.variants.reduce(function(a,v){ return a.concat(v.sizes); }, []) : p.sizes;
+    available.forEach(function(s){ if(range.indexOf(s) === -1) range.push(s); });
+    var isStandard = range.every(function(s){ return STANDARD_SIZES.indexOf(s) !== -1; });
+    return isStandard ? STANDARD_SIZES.slice() : range;
+  }
+  function sizePillsHTML(range, available){
+    return range.map(function(s){
+      if(available.indexOf(s) === -1) return '<button type="button" class="pill pill--soldout" data-soldout="'+s+'" aria-label="Talle '+s+' agotado">'+s+'</button>';
+      if(available.length === 1) return '<span class="pill is-active" style="cursor:default;">'+s+'</span>';
+      return '<button type="button" class="pill" data-size="'+s+'">'+s+'</button>';
+    }).join("");
+  }
+  function slug(text){
+    return String(text).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  }
+
   PRODUCTS.forEach(function(p, idx){
     var hasVariants = !!p.variants;
     selections[p.id] = {
@@ -1559,17 +1587,18 @@
     }
 
     if(hasVariants){
-      sizesHTML = '<div class="pillrow-label">Talle</div><div class="pillrow" data-role="sizes"></div><p class="hint" data-hint="sizes">Elegí un color para ver los talles</p>';
+      sizesHTML = '<div class="pillrow-label">Talle</div><div class="pillrow" data-role="sizes"></div><div class="soldout-note" data-role="soldout-note" hidden></div><p class="hint" data-hint="sizes">Elegí un color para ver los talles</p>';
       colorsHTML = '<div class="pillrow-label">Color</div><div class="pillrow" data-role="colors">';
       p.variants.forEach(function(v){ colorsHTML += '<button type="button" class="pill" data-color="'+v.color+'">'+v.color+'</button>'; });
       colorsHTML += '</div><p class="hint" data-hint="colors">Elegí un color</p>';
     } else {
+      var simplePills = sizePillsHTML(sizeRange(p), p.sizes);
       if(p.sizes.length > 1){
-        sizesHTML += '<div class="pillrow-label">Talle</div><div class="pillrow" data-role="sizes">';
-        p.sizes.forEach(function(s){ sizesHTML += '<button type="button" class="pill" data-size="'+s+'">'+s+'</button>'; });
-        sizesHTML += '</div><p class="hint" data-hint="sizes">Elegí un talle</p>';
+        sizesHTML += '<div class="pillrow-label">Talle</div><div class="pillrow" data-role="sizes">'+simplePills+'</div>'+
+          '<div class="soldout-note" data-role="soldout-note" hidden></div><p class="hint" data-hint="sizes">Elegí un talle</p>';
       } else {
-        sizesHTML += '<div class="pillrow-label">Talle</div><div class="pillrow"><span class="pill is-active" style="cursor:default;">'+p.sizes[0]+'</span></div>';
+        sizesHTML += '<div class="pillrow-label">Talle</div><div class="pillrow">'+simplePills+'</div>'+
+          '<div class="soldout-note" data-role="soldout-note" hidden></div>';
       }
       if(p.colors){
         colorsHTML += '<div class="pillrow-label">Color</div><div class="pillrow" data-role="colors">';
@@ -1619,6 +1648,25 @@
           var row = card.querySelector('[data-role="sizes"]');
           row.classList.remove("needs-attention");
           card.querySelector('[data-hint="sizes"]').classList.remove("is-visible");
+          card.querySelector('[data-role="soldout-note"]').hidden = true;
+        });
+      });
+    }
+
+    function bindSoldOut(){
+      card.querySelectorAll('[data-soldout]').forEach(function(btn){
+        btn.addEventListener("click", function(){
+          var size = btn.dataset.soldout;
+          var color = selections[p.id].color;
+          var label = p.name + (color ? " color " + color : "") + ", talle " + size;
+          var msg = "Hola! Quiero que me avisen si vuelve " + label + " 🖤";
+          var note = card.querySelector('[data-role="soldout-note"]');
+          note.innerHTML = 'Talle <strong>'+size+'</strong> agotado'+(color ? ' en '+color : '')+'. '+
+            '<a href="https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent(msg)+'" target="_blank" rel="noopener">Avisame si vuelve</a>';
+          note.hidden = false;
+          note.querySelector("a").addEventListener("click", function(){
+            track("avisame/" + p.id + "/" + slug(color || "unico") + "/" + slug(size), "Pidió aviso: " + label);
+          });
         });
       });
     }
@@ -1631,12 +1679,10 @@
         selections[p.id].size = variant.sizes.length === 1 ? variant.sizes[0] : null;
 
         var sizesRow = card.querySelector('[data-role="sizes"]');
-        if(variant.sizes.length === 1){
-          sizesRow.innerHTML = '<span class="pill is-active" style="cursor:default;">'+variant.sizes[0]+'</span>';
-        } else {
-          sizesRow.innerHTML = variant.sizes.map(function(s){ return '<button type="button" class="pill" data-size="'+s+'">'+s+'</button>'; }).join("");
-          bindSizePills();
-        }
+        sizesRow.innerHTML = sizePillsHTML(sizeRange(p), variant.sizes);
+        bindSizePills();
+        bindSoldOut();
+        card.querySelector('[data-role="soldout-note"]').hidden = true;
         sizesRow.classList.remove("needs-attention");
         card.querySelector('[data-hint="sizes"]').classList.remove("is-visible");
 
@@ -1658,6 +1704,7 @@
       });
     } else {
       bindSizePills();
+      bindSoldOut();
       card.querySelectorAll('[data-color]').forEach(function(btn){
         btn.addEventListener("click", function(){
           card.querySelectorAll('[data-color]').forEach(function(b){ b.classList.remove("is-active"); });
