@@ -1074,9 +1074,9 @@
       },
       variants:[
         { color:"Verde",       sizes:["S","M"], img:"img/p/remera_verde-16a06a60.jpg",   alt:"Remera vintage color verde a rayas" },
-        { color:"Azul y rojo", sizes:["S","M","L"], img:"img/p/remera_azul-ce63e502.jpg",  alt:"Remera vintage color azul y rojo a rayas" },
+        { color:"Azul y rojo", oneOnlySizes:["S"], sizes:["S","M","L"], img:"img/p/remera_azul-ce63e502.jpg",  alt:"Remera vintage color azul y rojo a rayas" },
         { color:"Azul",        sizes:["S"], img:"img/p/remera_azul2-49c2e1d0.jpg",   alt:"Remera vintage color azul a rayas" },
-        { color:"Celeste",     sizes:["S","M"], img:"img/p/remera_celeste-e54a3fe6.jpg", alt:"Remera vintage color celeste a rayas" },
+        { color:"Celeste",     oneOnlySizes:["S"], sizes:["S","M"], img:"img/p/remera_celeste-e54a3fe6.jpg", alt:"Remera vintage color celeste a rayas" },
         { color:"Gris claro",  sizes:["S","M"], img:"img/p/remera_gris_claro-404d3d59.jpg",  alt:"Remera vintage color gris claro a rayas" },
         { color:"Gris oscuro", sizes:["S","M"], img:"img/p/remera_gris_oscuro-91dd9d71.jpg", alt:"Remera vintage color gris oscuro a rayas" }
       ]
@@ -1917,18 +1917,21 @@
 
   function persist(){ try{ localStorage.setItem("ataj_cart", JSON.stringify(cart)); }catch(e){} }
 
-  function isLastUnit(id, color){
+  // One-unit limit: whole product, whole color, or only specific sizes of a color (oneOnlySizes).
+  function isLastUnit(id, color, size){
     var p = PRODUCTS.filter(function(x){ return x.id === id; })[0];
     if(!p) return false;
     if(p.oneOnly) return true;
     var variant = p.variants && p.variants.filter(function(v){ return v.color === color; })[0];
-    return !!(variant && variant.oneOnly);
+    if(!variant) return false;
+    if(variant.oneOnly) return true;
+    return !!(variant.oneOnlySizes && variant.oneOnlySizes.indexOf(size) !== -1);
   }
 
   function addToCart(p, size, color){
     var key = p.id + "__" + (size||"") + "__" + (color||"");
     var existing = cart.find(function(i){ return i.key === key; });
-    var lastUnit = isLastUnit(p.id, color);
+    var lastUnit = isLastUnit(p.id, color, size);
     if(existing){
       if(lastUnit){ showToast("Solo queda 1 unidad disponible"); return; }
       existing.qty += 1;
@@ -1943,7 +1946,7 @@
   function changeQty(key, delta){
     var item = cart.find(function(i){ return i.key === key; });
     if(!item) return;
-    if(delta > 0 && isLastUnit(item.id, item.color)){ showToast("Solo queda 1 unidad disponible"); return; }
+    if(delta > 0 && isLastUnit(item.id, item.color, item.size)){ showToast("Solo queda 1 unidad disponible"); return; }
     item.qty += delta;
     if(item.qty <= 0){ cart = cart.filter(function(i){ return i.key !== key; }); }
     persist(); renderCart();
@@ -2103,7 +2106,7 @@
       var meta = [];
       if(item.size) meta.push("Talle " + item.size);
       if(item.color) meta.push(item.color);
-      var capped = isLastUnit(item.id, item.color);
+      var capped = isLastUnit(item.id, item.color, item.size);
       var row = document.createElement("div");
       row.className = "cart-item";
       row.innerHTML =
