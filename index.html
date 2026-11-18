@@ -1716,6 +1716,19 @@
       }
       card._applyVariant = applyVariant;
 
+      // Back to how the card looks when the page opens: main photo, no color or size chosen.
+      card._resetVariant = function(){
+        if(!selections[p.id].color) return;
+        selections[p.id].color = null;
+        selections[p.id].size = null;
+        card.querySelectorAll('[data-color]').forEach(function(b){ b.classList.remove("is-active"); });
+        card.querySelector('[data-role="sizes"]').innerHTML = "";
+        card.querySelector('[data-role="soldout-note"]').hidden = true;
+        var photo = card.querySelector(".piece__photo");
+        photo.src = p.img;
+        photo.alt = p.alt;
+      };
+
       card.querySelectorAll('[data-color]').forEach(function(btn){
         btn.addEventListener("click", function(){
           var variant = p.variants.filter(function(v){ return v.color === btn.dataset.color; })[0];
@@ -1869,6 +1882,7 @@
       filterCats.querySelectorAll("[data-cat]").forEach(function(b){ b.classList.remove("is-active"); });
       btn.classList.add("is-active");
       activeCat = btn.dataset.cat;
+      cardEntries.forEach(function(entry){ if(entry.card._resetVariant) entry.card._resetVariant(); });
       applyFilters();
     });
   });
