@@ -1074,11 +1074,11 @@
       },
       variants:[
         { color:"Verde",       sizes:["S","M"], img:"img/p/remera_verde-16a06a60.jpg",   alt:"Remera vintage color verde a rayas" },
-        { color:"Azul y rojo", oneOnlySizes:["S"], sizes:["S","M","L"], img:"img/p/remera_azul-ce63e502.jpg",  alt:"Remera vintage color azul y rojo a rayas" },
+        { color:"Azul y rojo", sizes:["S","M","L"], img:"img/p/remera_azul-ce63e502.jpg",  alt:"Remera vintage color azul y rojo a rayas" },
         { color:"Azul",        sizes:["S"], img:"img/p/remera_azul2-49c2e1d0.jpg",   alt:"Remera vintage color azul a rayas" },
-        { color:"Celeste",     oneOnlySizes:["S"], sizes:["S","M"], img:"img/p/remera_celeste-e54a3fe6.jpg", alt:"Remera vintage color celeste a rayas" },
+        { color:"Celeste",     sizes:["S","M"], img:"img/p/remera_celeste-e54a3fe6.jpg", alt:"Remera vintage color celeste a rayas" },
         { color:"Gris claro",  sizes:["S","M"], img:"img/p/remera_gris_claro-404d3d59.jpg",  alt:"Remera vintage color gris claro a rayas" },
-        { color:"Gris oscuro", oneOnlySizes:["M"], sizes:["S","M"], img:"img/p/remera_gris_oscuro-91dd9d71.jpg", alt:"Remera vintage color gris oscuro a rayas" }
+        { color:"Gris oscuro", sizes:["S","M"], img:"img/p/remera_gris_oscuro-91dd9d71.jpg", alt:"Remera vintage color gris oscuro a rayas" }
       ]
     },
     {
@@ -1104,9 +1104,9 @@
       price:14000, img:"img/p/topvin_modelo-70f84940.jpg",
       alt:"Modelo con Top Vintage", size:"tall",
       variants:[
-        { color:"Verde",  oneOnlySizes:["S"], sizes:["S","M","L"], img:"img/p/topvin_verde-fb54d82a.jpg",  alt:"Top Vintage verde a rayas, cuello halter" },
+        { color:"Verde",  sizes:["S","M","L"], img:"img/p/topvin_verde-fb54d82a.jpg",  alt:"Top Vintage verde a rayas, cuello halter" },
         { color:"Gris",   sizes:["S","M","L"], img:"img/p/topvin_gris-a9bd6574.jpg",   alt:"Top Vintage gris a rayas, cuello halter" },
-        { color:"Rosa",   sizes:["S","M","L"], img:"img/p/topvin_rosa-c83a1ec2.jpg",   alt:"Top Vintage rosa a rayas, cuello halter" },
+        { color:"Crema",  sizes:["S","M","L"], img:"img/p/topvin_rosa-c83a1ec2.jpg",   alt:"Top Vintage crema a rayas, cuello halter" },
         { color:"Chocolate", sizes:["S","M","L"], img:"img/p/topvin_choco-e823d9ed.jpg", alt:"Top Vintage chocolate a rayas, cuello halter" }
       ]
     },
@@ -1475,7 +1475,34 @@
      STOCK["id-de-la-prenda"]["Color|Talle"] = unidades   (sin color: "|Talle")
      Una prenda que figura acá vende solo lo que dice: el carrito no deja pasar de ese número y los
      talles con 0 (o sin cargar) se ven tachados. Las prendas que no figuran siguen como antes. */
-  var STOCK = {};
+  var STOCK = {
+    "remera-vintage": {
+      "Azul y rojo|S":1, "Azul y rojo|M":1, "Azul y rojo|L":2,
+      "Celeste|S":1, "Celeste|M":4,
+      "Azul|S":5,
+      "Verde|S":4, "Verde|M":5,
+      "Gris oscuro|S":2, "Gris oscuro|M":1,
+      "Gris claro|S":2, "Gris claro|M":3
+    },
+    "musculosa-vintage": {
+      "Verde|S":1,
+      "Chocolate|S":2, "Chocolate|M":1,
+      "Gris|S":8, "Gris|M":4, "Gris|L":4,
+      "Crema|S":2
+    },
+    "top-vintage": {
+      "Gris|S":2, "Gris|M":2, "Gris|L":4,
+      "Crema|S":2, "Crema|M":5, "Crema|L":3,
+      "Chocolate|S":3, "Chocolate|M":4, "Chocolate|L":2,
+      "Verde|S":1, "Verde|M":4, "Verde|L":4
+    },
+    "marcia": {
+      "Verde|S":1,
+      "Celeste|M":1,
+      "Azul marino|S":2, "Azul marino|L":1,
+      "Amarillo|S":1
+    }
+  };
   function stockKey(color, size){ return (color || "") + "|" + size; }
   function stockLimit(id, color, size){
     var s = STOCK[id];
