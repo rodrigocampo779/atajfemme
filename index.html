@@ -389,6 +389,28 @@
   .piece__share .hw{ width:1rem; height:1rem; }
   .piece:hover .piece__share{ opacity:1; }
   .piece__share:hover{ border-color:var(--rose); color:var(--rose); }
+  /* galería: flechas y puntitos cuando un producto tiene varias fotos */
+  .piece__nav{
+    position:absolute; top:50%; width:2rem; height:2rem; margin-top:-1rem; border-radius:999px;
+    background:rgba(12,11,13,.55); backdrop-filter:blur(4px); border:1px solid var(--line-strong);
+    color:var(--bone); display:flex; align-items:center; justify-content:center;
+    cursor:pointer; z-index:2; padding:0; opacity:.85;
+    transition:opacity .25s ease, border-color .25s ease, color .25s ease;
+  }
+  .piece__nav .hw{ width:.95rem; height:.95rem; }
+  .piece__nav--prev{ left:.6rem; }
+  .piece__nav--prev .hw{ transform:rotate(180deg); }
+  .piece__nav--next{ right:.6rem; }
+  .piece__nav:hover{ opacity:1; border-color:var(--rose); color:var(--rose); }
+  .piece__dots{
+    position:absolute; left:0; right:0; bottom:.8rem; display:flex; justify-content:center; gap:.4rem;
+    z-index:2; pointer-events:none;
+  }
+  .piece__dots span{
+    width:.45rem; height:.45rem; border-radius:999px; background:rgba(243,236,231,.45);
+    box-shadow:0 0 0 1px rgba(12,11,13,.35);
+  }
+  .piece__dots span.is-on{ background:var(--rose); }
 
   .lightbox{
     position:fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center;
@@ -1367,6 +1389,10 @@
       desc:"Vestido largo negro en tela microfibra, breteles finos, abertura lateral y espalda con tiras cruzadas.",
       price:23000, img:"img/p/lupe-2a6a12c7.jpg",
       alt:"Modelo con Vestido Lupe negro largo de microfibra con abertura lateral",
+      gallery:[
+        { img:"img/p/lupe_frente-d35f0805.jpg",  alt:"Vestido Lupe negro, frente, en percha" },
+        { img:"img/p/lupe_espalda-ee11c9a7.jpg", alt:"Vestido Lupe negro, espalda abierta con tiras cruzadas, en percha" }
+      ],
       sizes:["M"], colors:null, size:"tall"
     },
     {
@@ -1607,12 +1633,20 @@
 
   function openLightboxForCard(card, p){
     var photo = card.querySelector(".piece__photo");
-    if(p.variants && p.variants.length > 1){
+    if(card._gallery){
+      lightboxState = { card:card, gallery:card._gallery };
+      lightboxPrev.hidden = false;
+      lightboxNext.hidden = false;
+      lightboxPrev.setAttribute("aria-label", "Foto anterior");
+      lightboxNext.setAttribute("aria-label", "Foto siguiente");
+    } else if(p.variants && p.variants.length > 1){
       var idx = -1;
       for(var i=0;i<p.variants.length;i++){ if(p.variants[i].alt === photo.alt){ idx = i; break; } }
       lightboxState = { card:card, variants:p.variants, index:idx };
       lightboxPrev.hidden = false;
       lightboxNext.hidden = false;
+      lightboxPrev.setAttribute("aria-label", "Color anterior");
+      lightboxNext.setAttribute("aria-label", "Color siguiente");
     } else {
       lightboxState = null;
       lightboxPrev.hidden = true;
@@ -1624,6 +1658,13 @@
   }
   function lightboxStep(dir){
     if(!lightboxState) return;
+    if(lightboxState.gallery){
+      lightboxState.gallery.step(dir);
+      var gp = lightboxState.card.querySelector(".piece__photo");
+      lightboxImg.src = gp.src;
+      lightboxImg.alt = gp.alt;
+      return;
+    }
     var n = lightboxState.variants.length;
     if(lightboxState.index === -1){
       lightboxState.index = dir > 0 ? 0 : n - 1;
@@ -1770,7 +1811,48 @@
     grid.appendChild(card);
     cardEntries.push({ card:card, cat:p.cat, onSale:!!p.oldPrice, text:(p.name+" "+p.desc).toLowerCase() });
 
+    // Varias fotos del mismo producto: p.gallery = fotos extra después de la principal.
+    if(p.gallery && p.gallery.length){
+      (function(){
+        var photos = [{ img:p.img, alt:p.alt }].concat(p.gallery);
+        var n = photos.length, gi = 0;
+        var frame = card.querySelector(".piece__frame");
+        var photoEl = frame.querySelector(".piece__photo");
+        var dots = document.createElement("div");
+        dots.className = "piece__dots";
+        dots.innerHTML = photos.map(function(){ return "<span></span>"; }).join("");
+        var prevBtn = document.createElement("button");
+        prevBtn.type = "button"; prevBtn.className = "piece__nav piece__nav--prev";
+        prevBtn.setAttribute("aria-label", "Foto anterior");
+        prevBtn.innerHTML = '<svg class="hw"><use href="#icon-chevron"/></svg>';
+        var nextBtn = document.createElement("button");
+        nextBtn.type = "button"; nextBtn.className = "piece__nav piece__nav--next";
+        nextBtn.setAttribute("aria-label", "Foto siguiente");
+        nextBtn.innerHTML = '<svg class="hw"><use href="#icon-chevron"/></svg>';
+        frame.appendChild(prevBtn); frame.appendChild(nextBtn); frame.appendChild(dots);
+        function show(i){
+          gi = (i + n) % n;
+          photoEl.src = photos[gi].img;
+          photoEl.alt = photos[gi].alt;
+          var d = dots.children;
+          for(var k=0;k<d.length;k++){ d[k].className = (k === gi ? "is-on" : ""); }
+        }
+        show(0);
+        card._gallery = { step:function(dir){ show(gi + dir); } };
+        prevBtn.addEventListener("click", function(e){ e.stopPropagation(); show(gi - 1); });
+        nextBtn.addEventListener("click", function(e){ e.stopPropagation(); show(gi + 1); });
+        var tx = null;
+        frame.addEventListener("touchstart", function(e){ tx = e.touches[0].clientX; }, { passive:true });
+        frame.addEventListener("touchend", function(e){
+          if(tx === null) return;
+          var dx = e.changedTouches[0].clientX - tx; tx = null;
+          if(Math.abs(dx) > 40){ show(gi + (dx < 0 ? 1 : -1)); frame._swiped = true; setTimeout(function(){ frame._swiped = false; }, 450); }
+        }, { passive:true });
+      })();
+    }
+
     card.querySelector(".piece__frame").addEventListener("click", function(){
+      if(this._swiped){ this._swiped = false; return; }
       openLightboxForCard(card, p);
     });
 
