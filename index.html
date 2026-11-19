@@ -1471,6 +1471,29 @@
     }
   ];
 
+  /* ---------- stock real (se carga a mano) ----------
+     STOCK["id-de-la-prenda"]["Color|Talle"] = unidades   (sin color: "|Talle")
+     Una prenda que figura acá vende solo lo que dice: el carrito no deja pasar de ese número y los
+     talles con 0 (o sin cargar) se ven tachados. Las prendas que no figuran siguen como antes. */
+  var STOCK = {};
+  function stockKey(color, size){ return (color || "") + "|" + size; }
+  function stockLimit(id, color, size){
+    var s = STOCK[id];
+    if(!s) return null;
+    var n = s[stockKey(color, size)];
+    return typeof n === "number" ? n : 0;
+  }
+  PRODUCTS.forEach(function(p){
+    var s = STOCK[p.id];
+    if(!s) return;
+    function inStock(color, size){ return (s[stockKey(color, size)] || 0) > 0; }
+    if(p.variants){
+      p.variants.forEach(function(v){ v.sizes = v.sizes.filter(function(sz){ return inStock(v.color, sz); }); });
+    } else {
+      p.sizes = p.sizes.filter(function(sz){ return inStock(null, sz); });
+    }
+  });
+
   function fmt(n){ return "$" + n.toLocaleString("es-AR"); }
 
   /* ---------- render products ---------- */
@@ -1914,6 +1937,13 @@
   /* ---------- cart ---------- */
   var cart = [];
   try{ var saved = JSON.parse(localStorage.getItem("ataj_cart") || "[]"); if(Array.isArray(saved)) cart = saved; }catch(e){}
+  // A cart saved before a stock change can't keep more than what is available now.
+  cart = cart.filter(function(i){
+    var max = maxUnits(i.id, i.color, i.size);
+    if(max <= 0) return false;
+    if(i.qty > max) i.qty = max;
+    return true;
+  });
 
   function persist(){ try{ localStorage.setItem("ataj_cart", JSON.stringify(cart)); }catch(e){} }
 
@@ -1928,12 +1958,23 @@
     return !!(variant.oneOnlySizes && variant.oneOnlySizes.indexOf(size) !== -1);
   }
 
+  // Most units of this exact prenda/color/talle that can go in one order.
+  function maxUnits(id, color, size){
+    var lim = stockLimit(id, color, size);
+    if(lim !== null) return lim;
+    return isLastUnit(id, color, size) ? 1 : Infinity;
+  }
+  function limitMessage(max){
+    return max === 1 ? "Solo queda 1 unidad disponible" : "Solo quedan " + max + " unidades disponibles";
+  }
+
   function addToCart(p, size, color){
     var key = p.id + "__" + (size||"") + "__" + (color||"");
     var existing = cart.find(function(i){ return i.key === key; });
-    var lastUnit = isLastUnit(p.id, color, size);
+    var max = maxUnits(p.id, color, size);
+    if(max <= 0){ showToast("Ese talle está agotado"); return; }
     if(existing){
-      if(lastUnit){ showToast("Solo queda 1 unidad disponible"); return; }
+      if(existing.qty >= max){ showToast(limitMessage(max)); return; }
       existing.qty += 1;
     }
     else{ cart.push({ key:key, id:p.id, name:p.name, price:p.price, img:p.img, size:size, color:color, qty:1 }); }
@@ -1946,7 +1987,8 @@
   function changeQty(key, delta){
     var item = cart.find(function(i){ return i.key === key; });
     if(!item) return;
-    if(delta > 0 && isLastUnit(item.id, item.color, item.size)){ showToast("Solo queda 1 unidad disponible"); return; }
+    var max = maxUnits(item.id, item.color, item.size);
+    if(delta > 0 && item.qty >= max){ showToast(limitMessage(max)); return; }
     item.qty += delta;
     if(item.qty <= 0){ cart = cart.filter(function(i){ return i.key !== key; }); }
     persist(); renderCart();
@@ -2106,7 +2148,7 @@
       var meta = [];
       if(item.size) meta.push("Talle " + item.size);
       if(item.color) meta.push(item.color);
-      var capped = isLastUnit(item.id, item.color, item.size);
+      var capped = item.qty >= maxUnits(item.id, item.color, item.size);
       var row = document.createElement("div");
       row.className = "cart-item";
       row.innerHTML =
