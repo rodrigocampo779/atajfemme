@@ -264,6 +264,11 @@
     background:var(--ink-2); border:1px solid var(--line-strong); color:var(--bone-dim);
   }
   .soldout-note strong{ color:var(--bone); }
+  .left-note{
+    margin-top:.45rem; font-size:.78rem; font-weight:700; letter-spacing:.01em; color:var(--rose);
+  }
+  .left-note::before{ content:"●"; font-size:.55rem; margin-right:.4rem; vertical-align:.12em; }
+  .left-note[hidden]{ display:none; }
   .soldout-note a{ color:var(--rose); font-weight:700; }
   @media (max-width:760px){
     .shop-filters{ flex-wrap:nowrap; gap:.6rem; margin-bottom:1.25rem; padding-bottom:.9rem; }
@@ -1773,7 +1778,7 @@
     }
 
     if(hasVariants){
-      sizesHTML = '<div class="pillrow-label">Talle</div><div class="pillrow" data-role="sizes"></div><div class="soldout-note" data-role="soldout-note" hidden></div><p class="hint" data-hint="sizes">Elegí un color para ver los talles</p>';
+      sizesHTML = '<div class="pillrow-label">Talle</div><div class="pillrow" data-role="sizes"></div><div class="soldout-note" data-role="soldout-note" hidden></div><div class="left-note" data-role="left-note" hidden></div><p class="hint" data-hint="sizes">Elegí un color para ver los talles</p>';
       colorsHTML = '<div class="pillrow-label">Color</div><div class="pillrow" data-role="colors">';
       p.variants.forEach(function(v){ colorsHTML += '<button type="button" class="pill" data-color="'+v.color+'">'+v.color+'</button>'; });
       colorsHTML += '</div><p class="hint" data-hint="colors">Elegí un color</p>';
@@ -1781,10 +1786,10 @@
       var simplePills = sizePillsHTML(sizeRange(p), p.sizes);
       if(p.sizes.length > 1){
         sizesHTML += '<div class="pillrow-label">Talle</div><div class="pillrow" data-role="sizes">'+simplePills+'</div>'+
-          '<div class="soldout-note" data-role="soldout-note" hidden></div><p class="hint" data-hint="sizes">Elegí un talle</p>';
+          '<div class="soldout-note" data-role="soldout-note" hidden></div><div class="left-note" data-role="left-note" hidden></div><p class="hint" data-hint="sizes">Elegí un talle</p>';
       } else {
         sizesHTML += '<div class="pillrow-label">Talle</div><div class="pillrow">'+simplePills+'</div>'+
-          '<div class="soldout-note" data-role="soldout-note" hidden></div>';
+          '<div class="soldout-note" data-role="soldout-note" hidden></div><div class="left-note" data-role="left-note" hidden></div>';
       }
       if(p.colors){
         colorsHTML += '<div class="pillrow-label">Color</div><div class="pillrow" data-role="colors">';
@@ -1898,6 +1903,29 @@
       });
     }
 
+    // "Quedan pocas": avisa cuando a un talle le quedan 3 unidades o menos (stock real de STOCK).
+    function renderLeftNote(){
+      var note = card.querySelector('[data-role="left-note"]');
+      if(!note) return;
+      var s = STOCK[p.id];
+      var color = hasVariants ? selections[p.id].color : null;
+      if(!s || (hasVariants && !color)){ note.hidden = true; return; }
+      var low = [], total = 0;
+      Object.keys(s).forEach(function(k){
+        var i = k.indexOf("|");
+        if((k.slice(0, i) || null) !== color) return;
+        var n = s[k];
+        if(n > 0){ total++; if(n <= 3) low.push({ size:k.slice(i + 1), n:n }); }
+      });
+      if(!low.length){ note.hidden = true; return; }
+      if(total === 1){
+        note.textContent = low[0].n === 1 ? "Última unidad" : "Quedan " + low[0].n;
+      } else {
+        note.textContent = "Quedan pocas: " + low.map(function(x){ return x.size + " (" + x.n + ")"; }).join(" · ");
+      }
+      note.hidden = false;
+    }
+
     if(hasVariants){
       function applyVariant(variant){
         card.querySelectorAll('[data-color]').forEach(function(b){ b.classList.toggle("is-active", b.dataset.color === variant.color); });
@@ -1910,6 +1938,7 @@
         bindSizePills();
         bindSoldOut();
         card.querySelector('[data-role="soldout-note"]').hidden = true;
+        renderLeftNote();
         sizesRow.classList.remove("needs-attention");
         card.querySelector('[data-hint="sizes"]').classList.remove("is-visible");
 
@@ -1934,6 +1963,7 @@
         card.querySelectorAll('[data-color]').forEach(function(b){ b.classList.remove("is-active"); });
         card.querySelector('[data-role="sizes"]').innerHTML = "";
         card.querySelector('[data-role="soldout-note"]').hidden = true;
+        renderLeftNote();
         if(!card._gallery){
           var photo = card.querySelector(".piece__photo");
           photo.src = p.img;
@@ -1950,6 +1980,7 @@
     } else {
       bindSizePills();
       bindSoldOut();
+      renderLeftNote();
       card.querySelectorAll('[data-color]').forEach(function(btn){
         btn.addEventListener("click", function(){
           card.querySelectorAll('[data-color]').forEach(function(b){ b.classList.remove("is-active"); });
