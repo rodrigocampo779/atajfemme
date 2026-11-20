@@ -1337,6 +1337,10 @@
       desc:"Musculosa en tela Ribb con puntilla en el escote.",
       price:14000, img:"img/p/luna_modelo-6340698e.jpg",
       alt:"Modelo con Top Luna", size:"tall",
+      gallery:[
+        { img:"img/p/luna_g_negro-bb91fd4a.jpg", alt:"Top Luna negro con puntilla en el escote, en maniquí" },
+        { img:"img/p/luna_g_choco-dc5dc2fc.jpg", alt:"Top Luna chocolate con puntilla en el escote, en maniquí" }
+      ],
       measures:{
         S:{ "Contorno de pecho":"60cm (se estira hasta 84cm)", "Largo":"36cm" },
         M:{ "Contorno de pecho":"62cm (se estira hasta 86cm)", "Largo":"37cm" },
@@ -1909,9 +1913,12 @@
         sizesRow.classList.remove("needs-attention");
         card.querySelector('[data-hint="sizes"]').classList.remove("is-visible");
 
-        var photo = card.querySelector(".piece__photo");
-        photo.src = variant.img;
-        photo.alt = variant.alt;
+        // Con galería, la foto la manejan las flechas: elegir color no la cambia.
+        if(!card._gallery){
+          var photo = card.querySelector(".piece__photo");
+          photo.src = variant.img;
+          photo.alt = variant.alt;
+        }
 
         var cr = card.querySelector('[data-role="colors"]');
         cr.classList.remove("needs-attention");
@@ -1927,9 +1934,11 @@
         card.querySelectorAll('[data-color]').forEach(function(b){ b.classList.remove("is-active"); });
         card.querySelector('[data-role="sizes"]').innerHTML = "";
         card.querySelector('[data-role="soldout-note"]').hidden = true;
-        var photo = card.querySelector(".piece__photo");
-        photo.src = p.img;
-        photo.alt = p.alt;
+        if(!card._gallery){
+          var photo = card.querySelector(".piece__photo");
+          photo.src = p.img;
+          photo.alt = p.alt;
+        }
       };
 
       card.querySelectorAll('[data-color]').forEach(function(btn){
