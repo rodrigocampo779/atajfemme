@@ -198,41 +198,58 @@
   .drop[hidden]{ display:none; }
   .drop{ margin-top:2rem; }
   .drop__card{
-    position:relative; overflow:hidden; display:grid; grid-template-columns:1.15fr .85fr;
-    border-radius:20px; border:1px solid var(--line-strong);
+    --xred:#8c1d2b; --xgold:#e2c28e;
+    position:relative; overflow:hidden; text-align:center; padding:2.6rem 1.4rem 2.4rem;
+    border-radius:22px; border:1px solid rgba(226,194,142,.45);
     background:
-      radial-gradient(circle at 12% 10%, rgba(188,129,135,.22), transparent 45%),
-      linear-gradient(160deg,var(--ink-2),var(--ink-3));
+      radial-gradient(circle at 50% -10%, rgba(226,194,142,.20), transparent 55%),
+      radial-gradient(circle at 15% 110%, rgba(140,29,43,.55), transparent 55%),
+      radial-gradient(circle at 90% 100%, rgba(140,29,43,.45), transparent 50%),
+      linear-gradient(170deg,#1a0a0d,#0c0b0d);
   }
-  .drop__body{
-    padding:2.4rem 2rem; display:flex; flex-direction:column; justify-content:center;
-    align-items:flex-start; text-align:left; position:relative; z-index:1;
+  /* borde interno punteado, como papel de regalo */
+  .drop__card::before{
+    content:""; position:absolute; inset:9px; border-radius:15px; pointer-events:none;
+    border:1px dashed rgba(226,194,142,.35);
   }
-  .drop__media{ position:relative; min-height:100%; }
-  .drop__media img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top; }
-  .drop__media::after{
-    content:""; position:absolute; inset:0;
-    background:linear-gradient(90deg,var(--ink-2) 0%, rgba(12,11,13,0) 38%);
+  .drop__snow{ position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+  .drop__snow i{
+    position:absolute; top:-12px; width:6px; height:6px; border-radius:50%;
+    background:rgba(255,255,255,.85); box-shadow:0 0 6px rgba(255,255,255,.7);
+    animation:dropFall linear infinite;
   }
-  .drop__eyebrow{ margin:0; font-family:var(--font-gothic); font-size:1.5rem; color:var(--rose); }
-  .drop__title{ margin:.2rem 0 .4rem; font-size:clamp(1.5rem,4.2vw,2.4rem); line-height:1.1; }
-  .drop__when{ margin:0 0 1.2rem; color:var(--bone); font-weight:800; letter-spacing:.02em; }
-  .drop__count{ display:flex; justify-content:flex-start; gap:.6rem; margin-bottom:1.2rem; }
-  @media (max-width:640px){
-    .drop__card{ grid-template-columns:1fr; }
-    .drop__media{ order:-1; min-height:260px; }
-    .drop__media::after{ background:linear-gradient(0deg,var(--ink-2) 0%, rgba(12,11,13,0) 45%); }
-    .drop__body{ padding:1.4rem 1.2rem 1.8rem; align-items:center; text-align:center; margin-top:-2.2rem; }
-    .drop__count{ justify-content:center; }
+  @keyframes dropFall{ to{ transform:translate3d(18px,330px,0); opacity:.1; } }
+  .drop__snow i:nth-child(1){ left:5%;  animation-duration:9s;  animation-delay:-1s; }
+  .drop__snow i:nth-child(2){ left:13%; animation-duration:12s; animation-delay:-6s; width:4px; height:4px; }
+  .drop__snow i:nth-child(3){ left:22%; animation-duration:10s; animation-delay:-3s; }
+  .drop__snow i:nth-child(4){ left:31%; animation-duration:13s; animation-delay:-8s; width:4px; height:4px; }
+  .drop__snow i:nth-child(5){ left:40%; animation-duration:9.5s; animation-delay:-5s; }
+  .drop__snow i:nth-child(6){ left:49%; animation-duration:11s; animation-delay:-2s; width:5px; height:5px; }
+  .drop__snow i:nth-child(7){ left:58%; animation-duration:12.5s; animation-delay:-9s; width:4px; height:4px; }
+  .drop__snow i:nth-child(8){ left:67%; animation-duration:10s; animation-delay:-4s; }
+  .drop__snow i:nth-child(9){ left:76%; animation-duration:13s; animation-delay:-7s; width:5px; height:5px; }
+  .drop__snow i:nth-child(10){ left:84%; animation-duration:9s; animation-delay:-2.5s; width:4px; height:4px; }
+  .drop__snow i:nth-child(11){ left:92%; animation-duration:11.5s; animation-delay:-6.5s; }
+  .drop__snow i:nth-child(12){ left:97%; animation-duration:10.5s; animation-delay:-1.5s; width:4px; height:4px; }
+  @media (prefers-reduced-motion:reduce){ .drop__snow i{ animation:none; opacity:.5; top:20%; } }
+  .drop__deco{ position:relative; margin:0 0 .3rem; font-size:1.35rem; letter-spacing:.5rem; color:var(--xgold); }
+  .drop__eyebrow{ position:relative; margin:0; font-family:var(--font-gothic); font-size:1.5rem; color:var(--xgold); }
+  .drop__title{
+    position:relative; margin:.1rem 0 .5rem; font-family:var(--font-gothic); font-weight:400;
+    font-size:clamp(2.6rem,11vw,4.6rem); line-height:1; letter-spacing:.01em; color:var(--bone);
+    text-shadow:0 2px 24px rgba(140,29,43,.8);
   }
+  .drop__title em{ font-style:normal; color:var(--xgold); }
+  .drop__when{ position:relative; margin:0 0 1.3rem; color:var(--bone); font-weight:800; letter-spacing:.03em; }
+  .drop__count{ position:relative; display:flex; justify-content:center; gap:.6rem; margin-bottom:1.3rem; }
   .drop__count div{
-    min-width:3.6rem; padding:.55rem .4rem; border-radius:12px; background:var(--ink);
-    border:1px solid var(--line-strong); display:flex; flex-direction:column; align-items:center;
+    min-width:3.7rem; padding:.55rem .4rem; border-radius:12px; background:rgba(12,11,13,.75);
+    border:1px solid rgba(226,194,142,.45); display:flex; flex-direction:column; align-items:center;
   }
-  .drop__count b{ font-family:var(--font-display); font-size:1.4rem; font-variant-numeric:tabular-nums; color:var(--bone); }
+  .drop__count b{ font-family:var(--font-display); font-size:1.4rem; font-variant-numeric:tabular-nums; color:var(--xgold); }
   .drop__count span{ font-size:.68rem; color:var(--bone-dim); text-transform:uppercase; letter-spacing:.06em; }
-  .drop__sub{ margin:0 0 1.3rem; max-width:34ch; font-size:.9rem; color:var(--bone-dim); }
-  @media (max-width:640px){ .drop__sub{ margin-inline:auto; } }
+  .drop__sub{ position:relative; margin:0 auto 1.3rem; max-width:34ch; font-size:.92rem; color:var(--bone-dim); }
+  .drop .btn--primary{ position:relative; background:linear-gradient(135deg,#b3283a,var(--xred)); box-shadow:0 10px 30px -12px rgba(179,40,58,.7); }
   .btn--add{ background:var(--ink-3); color:var(--bone); border:1px solid var(--line-strong); width:100%; margin-top:1.1rem; }
   .btn--add:hover{ background:var(--rose); border-color:var(--rose); color:#1a0510; }
 
@@ -825,9 +842,10 @@
 
   <section class="wrap drop" id="dropNavidad" hidden>
     <div class="drop__card">
-     <div class="drop__body">
+      <div class="drop__snow" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <p class="drop__deco" aria-hidden="true">✦ ❄ ✦</p>
       <p class="drop__eyebrow">Se viene</p>
-      <h2 class="drop__title">Colección de Navidad 🎄</h2>
+      <h2 class="drop__title">Colección<br><em>Navidad</em> 🎄</h2>
       <p class="drop__when">Lunes 1 de diciembre · 20 h</p>
       <div class="drop__count" id="dropCount" aria-live="off">
         <div><b id="dropD">0</b><span>días</span></div>
@@ -837,10 +855,6 @@
       </div>
       <p class="drop__sub">Pocas unidades por modelo. Anotate en la lista VIP y entrás una hora antes.</p>
       <a class="btn btn--primary" id="dropVip" href="#" target="_blank" rel="noopener">Anotame en la lista VIP</a>
-     </div>
-     <div class="drop__media" aria-hidden="true">
-      <img src="img/p/lupe-2a6a12c7.jpg" alt="" loading="lazy">
-     </div>
     </div>
   </section>
 
