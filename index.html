@@ -2020,6 +2020,8 @@
     // "Quedan pocas": avisa cuando a un talle le quedan 3 unidades o menos (stock real de STOCK).
     function renderLeftNote(){
       var note = card.querySelector('[data-role="left-note"]');
+      // Cartel desactivado a pedido (no gustó cómo quedaba). Para volver a activarlo, quitar este return.
+      if(note){ note.hidden = true; return; }
       if(!note) return;
       var s = STOCK[p.id];
       var color = hasVariants ? selections[p.id].color : null;
