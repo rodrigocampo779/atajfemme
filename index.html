@@ -375,7 +375,6 @@
   }
   .piece__tag--offer{ background:linear-gradient(135deg,var(--rose),var(--rose-deep)); color:#fff; box-shadow:0 4px 14px -4px rgba(188,129,135,.55); }
   .piece__tag--new{ background:#ff3fb0; color:#fff; box-shadow:0 4px 16px -4px rgba(255,63,176,.7); }
-  .piece__mark{ position:absolute; bottom:.8rem; right:.8rem; width:1.6rem; height:1.6rem; color:var(--bone); opacity:.55; }
   .piece__zoom{
     position:absolute; top:.9rem; right:.9rem; width:2.1rem; height:2.1rem; border-radius:999px;
     background:rgba(12,11,13,.55); backdrop-filter:blur(4px); border:1px solid var(--line-strong);
@@ -1805,7 +1804,6 @@
       '<div class="piece__frame">'+
         '<img class="piece__photo" src="'+p.img+'" alt="'+p.alt+'" loading="lazy">'+
         (p.tag ? '<span class="'+tagClass+'">'+p.tag+'</span>' : '')+
-        '<svg class="piece__mark hw"><use href="#heart-wire"/></svg>'+
         '<button type="button" class="piece__share" aria-label="Copiar enlace del producto"><svg class="hw"><use href="#icon-link"/></svg></button>'+
         '<span class="piece__zoom" aria-hidden="true"><svg class="hw"><use href="#icon-expand"/></svg></span>'+
       '</div>'+
