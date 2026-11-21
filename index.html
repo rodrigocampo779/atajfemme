@@ -2032,11 +2032,9 @@
         if(n > 0){ total++; if(n <= 3) low.push({ size:k.slice(i + 1), n:n }); }
       });
       if(!low.length){ note.hidden = true; return; }
-      if(total === 1){
-        note.textContent = low[0].n === 1 ? "Última unidad" : "Quedan " + low[0].n;
-      } else {
-        note.textContent = "Quedan pocas: " + low.map(function(x){ return x.size + " (" + x.n + ")"; }).join(" · ");
-      }
+      // Solo se avisa en prendas de un único talle disponible ("Última unidad"); la lista por talle se sacó.
+      if(total !== 1){ note.hidden = true; return; }
+      note.textContent = low[0].n === 1 ? "Última unidad" : "Quedan " + low[0].n;
       note.hidden = false;
     }
 
