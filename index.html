@@ -859,7 +859,7 @@
       <div class="drop__main">
         <p class="drop__eyebrow">Se viene</p>
         <h2 class="drop__title">Colección <em>Navidad</em> 🎄</h2>
-        <p class="drop__when">Lunes 1 de diciembre · 20 h</p>
+        <p class="drop__when">Sábado 5 de diciembre · 20 h</p>
       </div>
       <div class="drop__count" id="dropCount" aria-live="off">
         <div><b id="dropD">0</b><span>días</span></div>
@@ -1169,11 +1169,11 @@
     }
   }
 
-  // Aviso del drop de Navidad: lunes 1/12 a las 20 h (Argentina = 23:00 UTC). Desaparece solo al llegar la hora.
+  // Aviso del drop de Navidad: sábado 5/12 a las 20 h (Argentina = 23:00 UTC). Desaparece solo al llegar la hora.
   (function(){
     var box = document.getElementById("dropNavidad");
     if(!box) return;
-    var LAUNCH = Date.UTC(2026, 11, 1, 23, 0, 0);
+    var LAUNCH = Date.UTC(2026, 11, 5, 23, 0, 0);
     var timer = null;
     function two(n){ return (n < 10 ? "0" : "") + n; }
     function tick(){
