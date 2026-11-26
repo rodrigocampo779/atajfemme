@@ -867,10 +867,6 @@
         <div><b id="dropM">00</b><span>min</span></div>
         <div><b id="dropS">00</b><span>seg</span></div>
       </div>
-      <div class="drop__cta">
-        <p class="drop__sub">Pocas unidades por modelo. En la lista VIP entrás 1 hora antes.</p>
-        <a class="btn btn--primary" id="dropVip" href="#" target="_blank" rel="noopener">Anotame en la lista VIP</a>
-      </div>
     </div>
   </section>
 
@@ -1186,10 +1182,6 @@
       document.getElementById("dropS").textContent = two(s % 60);
       box.hidden = false;
     }
-    var vip = document.getElementById("dropVip");
-    vip.href = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" +
-      encodeURIComponent("Hola! Quiero entrar a la lista VIP del lanzamiento de Navidad 🎄🖤");
-    vip.addEventListener("click", function(){ track("vip/navidad", "Lista VIP Navidad"); });
     tick();
     timer = setInterval(tick, 1000);
   })();
@@ -1324,10 +1316,11 @@
       alt:"Modelo con Short Bianca blanco con puntilla", size:"tall",
       measures:{
         S:{ "Contorno de cintura":"62cm (se estira hasta 98cm)", "Largo":"22cm" },
-        M:{ "Contorno de cintura":"64cm (se estira hasta 100cm)", "Largo":"23cm" }
+        M:{ "Contorno de cintura":"64cm (se estira hasta 100cm)", "Largo":"23cm" },
+        L:{ "Contorno de cintura":"66cm (se estira hasta 102cm)", "Largo":"24cm" }
       },
       variants:[
-        { color:"Blanco", sizes:["S","M"], img:"img/p/bianca_blanco-bbec4656.jpg", alt:"Modelo con Short Bianca blanco con puntilla" },
+        { color:"Blanco", sizes:["S","M","L"], img:"img/p/bianca_blanco-bbec4656.jpg", alt:"Modelo con Short Bianca blanco con puntilla" },
         { color:"Negro",  sizes:["S","M"], img:"img/p/bianca_negro-40a5cca4.jpg",  alt:"Short Bianca negro con puntilla" }
       ]
     },
@@ -1683,7 +1676,7 @@
       "Negro|L":1
     },
     "bianca": {
-      "Blanco|S":1, "Blanco|M":2,
+      "Blanco|S":1, "Blanco|M":2, "Blanco|L":1,
       "Negro|S":2, "Negro|M":2
     },
     "amelie": {
